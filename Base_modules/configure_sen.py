@@ -1,4 +1,4 @@
-import set_param
+from Base_modules import set_param
 
 
 class SetSensors:
@@ -16,7 +16,7 @@ class SetSensors:
         self.MCH = 0  # Member of CH
 
 
-def start(myModel: set_param.Model, n, GX, GY):
+def start(Model: set_param.Model, n, GX, GY):
     emptySensor = SetSensors()
     Sensors = [
         emptySensor for x in range(n + 1)
@@ -39,9 +39,9 @@ def start(myModel: set_param.Model, n, GX, GY):
         Sensors[i].id = i
         # Sensors[i].RR=Model.RR
 
-    Sensors[n + 1].xd = myModel.sinkx
-    Sensors[n + 1].yd = myModel.sinky
+    Sensors[n + 1].xd = Model.sinkx
+    Sensors[n + 1].yd = Model.sinky
     Sensors[n + 1].E = 100
-    Sensors[n + 1].id = myModel.n + 1
+    Sensors[n + 1].id = Model.n + 1
 
     return Sensors

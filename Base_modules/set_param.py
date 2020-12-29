@@ -53,7 +53,7 @@ class Model:
         # %Radio Range
         self.RR = 0.5 * x * sqrt(2)
 
-        self.numRx = sqrt(self.p * self.n)
+        self.numRx = int(sqrt(self.p * self.n))
         self.dr = x / self.numRx
         # %%%%%%%%%%%%%%%%%%%%%%%%% END OF PARAMETERS %%%%%%%%%%%%%%%%%%%%%%%%
 
