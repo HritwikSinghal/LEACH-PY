@@ -13,7 +13,7 @@ class Model:
         self.n = n
 
         # %Sink Motion pattern
-        self.sinkx = self.x * 0.5
+        self.sinkx = x * 0.5
         self.sinky = self.sinkx
 
         # %Optimal Election Probability of a node to become cluster head
