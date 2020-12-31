@@ -29,3 +29,4 @@ def start(Sensors: [], Model: set_param.Model, deadnum=0):
     xp = [r * cos(each_angle) for each_angle in angle]
     yp = [r * sin(each_angle) for each_angle in angle]
 
+    # todo: next part is missing
