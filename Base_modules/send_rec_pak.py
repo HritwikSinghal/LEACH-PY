@@ -1,7 +1,7 @@
 from math import *
 
 
-def SReceivePackets(Sensors, Model, Sender, PacketType, Receiver):
+def SendReceivePackets(Sensors, Model, Sender, PacketType, Receiver):
     global srp, rrp, sdp, rdp
     sap = 0  # % S a packet
     rap = 0  # % Receive a packet

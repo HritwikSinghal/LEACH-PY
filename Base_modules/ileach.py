@@ -3,7 +3,7 @@ from Base_modules import set_param
 from Base_modules import plot_ileach
 from Base_modules import configure_sen
 from Base_modules import send_rec_pak
-
+from Base_modules import dist_to_sink
 
 class ILEACH:
 
@@ -17,6 +17,7 @@ class ILEACH:
         self.conf_sen()
         self.init_param()
         self.start_sim(n)
+        self.start_main_loop()
 
     def conf_sen(self):
         # ######################### configuration Sensors ####################
@@ -56,6 +57,20 @@ class ILEACH:
         self.Sensors = send_rec_pak.SendReceivePackets(
             self.Sensors, self.Model, self.Sender, 'Hello', self.Receiver
         )
+
+        # % All sensor send location information to Sink .
+        self.Sensors = dist_to_sink.disToSink(self.Sensors, self.Model)
+
+        # %Save metrics
+        self.SRP[1] = self.srp
+        self.RRP[1] = self.rrp
+        self.SDP[1] = self.sdp
+        self.RDP[1] = self.rdp
+
+        self.x = 0
+
+    def start_main_loop(self):
+        pass
 
     def zeros(self, row, column):
         re_list = []
