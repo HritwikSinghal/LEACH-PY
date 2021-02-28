@@ -1,8 +1,8 @@
-from Base_modules import set_param
+from Base_modules import LEACH_setParameters
 from math import *
 
 
-def start(Sensors: [], Model: set_param.Model, deadnum=0):
+def start(Sensors: [], Model: LEACH_setParameters.Model, deadnum=0):
     n = Model.n
     numRx = Model.numRx
     zeroarr = [0 for x in range(numRx)]

@@ -1,7 +1,7 @@
 from math import *
 
 
-def disToSink(Sensors, Model):
+def start(Sensors, Model):
     n = Model.n
     for i in range(n):
         distance = sqrt((Sensors[i].xd - Sensors[n + 1].xd) ^ 2

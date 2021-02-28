@@ -3,7 +3,7 @@ from math import *
 
 class Area:
     def __init__(self):
-        # %Field Dimensions - x and y maximum (in meters)
+        # Field Dimensions - x and y maximum (in meters)
         self.x = 1000
         self.y = 1000
 
@@ -53,8 +53,8 @@ class Model:
         # %Radio Range
         self.RR = 0.5 * x * sqrt(2)
 
-        self.numRx = int(sqrt(self.p * self.n))
-        self.dr = x / self.numRx
+        # self.numRx = int(sqrt(self.p * self.n))
+        # self.dr = x / self.numRx
         # %%%%%%%%%%%%%%%%%%%%%%%%% END OF PARAMETERS %%%%%%%%%%%%%%%%%%%%%%%%
 
 
@@ -62,4 +62,4 @@ def setParameters(n):
     myArea = Area()
     myModel = Model(n, myArea.x, myArea.y)
 
-    return myModel, myArea
+    return myArea, myModel

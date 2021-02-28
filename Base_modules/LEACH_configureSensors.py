@@ -1,9 +1,7 @@
-from Base_modules import set_param
-
-
-class SetSensors:
+class Sensor:
 
     def __init__(self):
+        # Configuration EmptySensor
         self.xd = 0
         self.yd = 0
         self.G = 0
@@ -13,13 +11,15 @@ class SetSensors:
         self.id = 0
         self.dis2sink = 0
         self.dis2ch = 0
-        self.MCH = 0  # Member of CH
+        self.MCH = 0  # Member of which CH
 
 
-def start(Model: set_param.Model, n, GX, GY):
-    emptySensor = SetSensors()
+def start(Model, n, GX, GY):
+    emptySensor = Sensor()
+
+    # Configuration Sensors
     Sensors = [
-        emptySensor for x in range(n + 1)
+        emptySensor for _ in range(n + 1)
     ]
 
     for i in range(n):
@@ -39,6 +39,7 @@ def start(Model: set_param.Model, n, GX, GY):
         Sensors[i].id = i
         # Sensors[i].RR=Model.RR
 
+    # for sink
     Sensors[n + 1].xd = Model.sinkx
     Sensors[n + 1].yd = Model.sinky
     Sensors[n + 1].E = 100
