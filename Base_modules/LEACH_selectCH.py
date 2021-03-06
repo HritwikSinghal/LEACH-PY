@@ -5,7 +5,10 @@ def zeros(row, column):
     re_list = []
     for x in range(row):
         temp_list = [0 for _ in range(column)]
-        re_list.append(temp_list)
+        if row == 1:
+            re_list.extend(temp_list)
+        else:
+            re_list.append(temp_list)
 
     return re_list
 

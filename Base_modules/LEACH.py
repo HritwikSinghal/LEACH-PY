@@ -1,16 +1,31 @@
-from Base_modules import createRandomSen
-from Base_modules import disToSink
-import findReceiver, joinToNearestCH, findSender
 from Base_modules import LEACH_configureSensors
-from Base_modules import LEACH_plotter
 from Base_modules import LEACH_selectCH
 from Base_modules import LEACH_setParameters
+from Base_modules import createRandomSen
+from Base_modules import disToSink
+from Base_modules import findReceiver
+from Base_modules import findSender
+from Base_modules import joinToNearestCH
 from Base_modules import resetSensors
 from Base_modules import sendReceivePackets
 
-from math import *
+################################################################
+# todo :test
+import pprint
 
 
+def var_pp(stuff):
+    pp = pprint.PrettyPrinter(indent=1)
+    for x in stuff:
+        pp.pprint(vars(x))
+
+
+def pp(stuff):
+    pp = pprint.PrettyPrinter(indent=4)
+    pp.pprint(stuff)
+
+
+################################################################
 class ILEACH:
 
     def __init__(self, n=200):
@@ -19,13 +34,35 @@ class ILEACH:
         self.n = n  # #Number of Nodes in the field
         self.myArea, self.Model = LEACH_setParameters.setParameters(self.n)  # Set Parameters self.Sensors and Network
 
+        # todo: test
+        print(vars(self.myArea))
+        print(vars(self.Model))
+        print('----------------------------------------------')
+
         # ######################### configuration Sensors ####################
         self.conf_sen()
+
+        # todo: test
+        pp(self.X)
+        pp(self.Y)
+        var_pp(self.Sensors)
+        print('----------------------------------------------')
+
         # todo: Plot sensors Here
         # self.myplot = LEACH_plotter.start(self.Sensors, self.Model, self.deadNum)
 
         # ################# Parameters initialization #############
         self.init_param()
+
+        # todo: test
+        print("self.initEnergy: ", self.initEnergy)
+        print("self.SRP", self.SRP)
+        print("len(self.SRP)", len(self.SRP))
+        print(self.RRP)
+        print(self.SDP)
+        print(self.RDP)
+        print('----------------------------------------------')
+        exit()
 
         # ############# Start Simulation ##############
         self.start_sim(n)
@@ -48,9 +85,9 @@ class ILEACH:
         self.flag_first_dead = 0  # flag_first_dead
         self.deadNum = 0  # Number of dead nodes
 
-        self.initEnergy = 0  # #Initial Energy
-        for i in range(self.n):
-            self.initEnergy = self.Sensors[i].E + self.initEnergy
+        self.initEnergy = 0  # Initial Energy
+        for sensor in self.Sensors:
+            self.initEnergy += sensor.E
 
         self.SRP = self.zeros(1, self.Model.rmax)  # number of sent routing packets
         self.RRP = self.zeros(1, self.Model.rmax)  # number of receive routing packets
@@ -66,7 +103,10 @@ class ILEACH:
         re_list = []
         for x in range(row):
             temp_list = [0 for _ in range(column)]
-            re_list.append(temp_list)
+            if row == 1:
+                re_list.extend(temp_list)
+            else:
+                re_list.append(temp_list)
 
         return re_list
 
@@ -169,7 +209,7 @@ class ILEACH:
 
             # ######## steady-state phase ######
             self.NumPacket = self.Model.NumPacket
-            for i in range(1): # NumPacket
+            for i in range(1):  # NumPacket
                 # todo: Plotter
                 # [deadNumo, circlex, circley] = LEACH_plotter.start(self.Sensors, self.Model)
 
@@ -177,7 +217,8 @@ class ILEACH:
                 for j in range(len(self.TotalCH)):
                     self.Receiver = self.TotalCH(j).id
                     findSender.start(self.Sensors, self.Model, self.Receiver)
-                    self.Sensors = sendReceivePackets.start(self.Sensors, self.Model, self.Sender, 'Data', self.Receiver)
+                    self.Sensors = sendReceivePackets.start(self.Sensors, self.Model, self.Sender, 'Data',
+                                                            self.Receiver)
 
             # ### send Data packet from CH to Sink after Data aggregation
             for i in range(len(self.TotalCH)):
@@ -190,7 +231,8 @@ class ILEACH:
                 if self.Sensors[i].MCH == self.Sensors[n + 1].id:
                     self.Receiver = self.n + 1  # #Sink
                     Ser = self.Sensors(i).id  # #Other Nodes
-                    self.Sensors = sendReceivePackets.start(self.Sensors, self.Model, self.Sender, 'Data', self.Receiver)
+                    self.Sensors = sendReceivePackets.start(self.Sensors, self.Model, self.Sender, 'Data',
+                                                            self.Receiver)
 
             ## Todo: STATISTICS
 
@@ -232,3 +274,7 @@ class ILEACH:
             #
             #     lastPeriod = r
             #     break
+
+
+if __name__ == '__main__':
+    myleach = ILEACH(n=5)

@@ -15,11 +15,13 @@ class Sensor:
 
 
 def start(Model, n, GX, GY):
-    emptySensor = Sensor()
+    # DO not use this, it will assign same object to all in array so all will have save xd, yd etc
+    # emptySensor = Sensor()
 
     # Configuration Sensors
+    # created extra one slot for sink
     Sensors = [
-        emptySensor for _ in range(n + 1)
+        Sensor() for _ in range(n + 1)
     ]
 
     for i in range(n):
@@ -40,9 +42,14 @@ def start(Model, n, GX, GY):
         # Sensors[i].RR=Model.RR
 
     # for sink
-    Sensors[n + 1].xd = Model.sinkx
-    Sensors[n + 1].yd = Model.sinky
-    Sensors[n + 1].E = 100
-    Sensors[n + 1].id = Model.n + 1
+    """ 
+    first n - 1 slots in Sensors are for normal sensors. (0 to n-1) 
+    nth slot is for sink
+    so for n=10, 0-9 are 10 normal sensors and 10th slot is for sink 
+    """
+    Sensors[n].xd = Model.sinkx
+    Sensors[n].yd = Model.sinky
+    Sensors[n].E = 100
+    Sensors[n].id = Model.n
 
     return Sensors

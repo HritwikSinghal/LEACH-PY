@@ -1,5 +1,5 @@
 from math import *
-from LEACH_setParameters import *
+from Base_modules.LEACH_setParameters import *
 
 
 def start(Sensors, Model: Model, Sender, PacketType, Receiver, srp, rrp, sdp, rdp):
