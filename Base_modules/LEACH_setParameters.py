@@ -14,15 +14,16 @@ class Model:
 
         # Sink Motion pattern
         self.sinkx = x * 0.5
-        self.sinky = self.sinkx
+        self.sinky = y * 0.5
 
         # Optimal Election Probability of a node to become cluster head
         self.p = 0.1
 
-        # %%%%%%%%%%%%%%%%%%%%%%%%% Energy Model (all values in Joules)%%%%%%%%%%%
+        # %%%%%%%%%%% Energy Model (all values in Joules and each value is for 1byte of data) %%%%%%%%%%%
         # Initial Energy
         self.Eo = 2
 
+        # ETX = Energy dissipated in Transmission, ERX = in Receive
         # Eelec=Etx=Erx
         self.ETX = 50 * 0.000000001
         self.ERX = 50 * 0.000000001
@@ -34,10 +35,10 @@ class Model:
         # Data Aggregation Energy
         self.EDA = 5 * 0.000000001
 
-        # %Computation of do
+        # Computation of do
         self.do = sqrt(self.Efs / self.Emp)
 
-        # %%%%%%%%%%%%%%%%%%%%%%%% Run Time Parameters %%%%%%%%%%%%%%%%%%%%%%%%%
+        # %%%%%%%%%%%%%%%%%%%%%%%%% Run Time Parameters %%%%%%%%%%%%%%%%%%%%%%%%%
         # maximum number of rounds
         self.rmax = 200
 
@@ -47,7 +48,7 @@ class Model:
         # Hello packet size
         self.HpacketLen = 100
 
-        # Number of Packets sended in steady-state phase
+        # Number of Packets sent in steady-state phase
         self.NumPacket = 10
 
         # Radio Range

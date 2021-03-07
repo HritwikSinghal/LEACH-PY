@@ -1,47 +1,46 @@
 from math import *
 from Base_modules.LEACH_setParameters import *
+from Base_modules.LEACH_configureSensors import *
 
 
-def start(Sensors, Model: Model, Sender, PacketType, Receiver, srp, rrp, sdp, rdp):
-    # global srp, rrp, sdp, rdp
-
-    sap = 0  # Send a packet
-    rap = 0  # Receive a packet
+def start(Sensors: list[Sensor], myModel: Model, Senders: list, PacketType: str, Receivers: list, srp, rrp, sdp, rdp):
+    sap = 0  # Send a packet or Number of sent packets
+    rap = 0  # Receive a packet or Number of received packets
     if PacketType == 'Hello':
-        PacketSize = Model.HpacketLen
+        PacketSize = myModel.HpacketLen
     else:
-        PacketSize = Model.DpacketLen
+        PacketSize = myModel.DpacketLen
 
-    # Energy dissipated from Sensors for S a packet
-    for i in range(len(Sender)):
-        for j in range(len(Receiver)):
-            distance = sqrt((Sensors[Sender[i]].xd - Sensors[Receiver[j]].xd) ^ 2 +
-                            (Sensors[Sender[i]].yd - Sensors[Receiver[j]].yd) ^ 2)
+    # Energy dissipated from Sensors for Sending a packet
+    # Each sender will send to each receiver
+    for sender in Senders:
+        for receiver in Receivers:
+            # calculate euclidean distance between sender and receiver
+            distance = sqrt(
+                pow(Sensors[sender].xd - Sensors[receiver].xd, 2) + pow(Sensors[sender].yd - Sensors[receiver].yd, 2)
+            )
 
-            if distance > Model.do:
-                Sensors[Sender[i]].E = Sensors[Sender[i]].E - (
-                        Model.ETX * PacketSize + Model.Emp * PacketSize * (distance ^ 4))
+            if distance > myModel.do:
+                Sensors[sender].E -= myModel.ETX * PacketSize + myModel.Emp * PacketSize * pow(distance, 4)
 
-                # % Sent a packet
-                if Sensors[Sender[i]].E > 0:
-                    sap = sap + 1
+                # Send a packet and increment counter by 1
+                if Sensors[sender].E > 0:
+                    sap += 1
             else:
-                Sensors[Sender[i]].E = Sensors[Sender[i]].E - (
-                        Model.ETX * PacketSize + Model.Efs * PacketSize * (distance ^ 2))
+                Sensors[sender].E -= myModel.ETX * PacketSize + myModel.Efs * PacketSize * pow(distance, 4)
 
-                # % Sent a packet
-                if Sensors[Sender[i]].E > 0:
+                # Send a packet and increment counter by 1
+                if Sensors[sender].E > 0:
                     sap += 1
 
-    # %Energy dissipated from sensors for Receive a packet
-    for j in range(len(Receiver)):
-        Sensors[Receiver[j]].E = Sensors[Receiver[j]].E - ((Model.ERX + Model.EDA) * PacketSize)
+    # Energy dissipated from receivers for Receiving a packet
+    for receiver in Receivers:
+        Sensors[receiver].E -= (myModel.ERX + myModel.EDA) * PacketSize
 
-    for i in range(len(Sender)):
-        for j in range(len(Receiver)):
-
+    for sender in Senders:
+        for receiver in Receivers:
             # Received a Packet
-            if (Sensors[Sender[i]]).E > 0 and Sensors[Receiver[j]].E > 0:
+            if Sensors[sender].E > 0 and Sensors[receiver].E > 0:
                 rap += 1
 
     if PacketType == 'Hello':
@@ -51,7 +50,10 @@ def start(Sensors, Model: Model, Sender, PacketType, Receiver, srp, rrp, sdp, rd
         sdp += sap
         rdp += rap
 
+    return srp, rrp, sdp, rdp
 
+
+# todo: implement this
 '''
 
 %     else %To Cluster Head
