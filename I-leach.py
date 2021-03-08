@@ -6,6 +6,6 @@
 
 from Base_modules import LEACH
 
+
 if __name__ == '__main__':
-    myILeach = LEACH.ILEACH()
-    myILeach.main_loop()
+    myLeach = LEACH.LEACH(n=5)

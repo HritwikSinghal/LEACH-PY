@@ -27,7 +27,8 @@ def pp(stuff):
 
 
 ################################################################
-class ILEACH:
+
+class LEACH:
 
     def __init__(self, n=200):
         # After every "AroundClear" rounds, let every sensor be CH again
@@ -77,7 +78,7 @@ class ILEACH:
         self.start_sim(n)
 
         # todo: test
-        print("self.Sender", self.Senders)
+        print("self.Sender", self.sender)
         print("self.Receiver ", end='')
         pp(self.Receivers)
         var_pp(self.Sensors)
@@ -146,11 +147,11 @@ class ILEACH:
         self.rdp = 0  # counter of number of receive data packets
 
         # Sink broadcast 'Hello' message to all nodes
-        self.Senders = [self.n]  # List of senders, for start_sim, sink will send hello packet to all
+        self.sender = [self.n]  # List of senders, for start_sim, sink will send hello packet to all
         self.Receivers = [x for x in range(n)]  # List of senders, for start_sim, All nodes will receive from sink
 
         self.srp, self.rrp, self.sdp, self.rdp = sendReceivePackets.start(
-            self.Sensors, self.myModel, self.Senders, 'Hello', self.Receivers, self.srp, self.rrp, self.sdp, self.rdp
+            self.Sensors, self.myModel, self.sender, 'Hello', self.Receivers, self.srp, self.rrp, self.sdp, self.rdp
         )
 
         # All sensors location information to Sink .
@@ -210,13 +211,13 @@ class ILEACH:
             # todo: fix this
             self.TotalCH = LEACH_selectCH.start(self.Sensors, self.myModel, r, self.circlex, self.circley)
 
-            # #Broadcasting CHs to All Sensor that are in Radio Rage CH.
+            # Broadcasting CHs to All Sensors that are in Radio Rage CH.
             for i in range(len(self.TotalCH)):
-                self.Senders = self.TotalCH[i].id
+                self.sender = self.TotalCH[i].id
                 SenderRR = self.myModel.RR
-                self.Receivers = findReceiver.start(self.Sensors, self.myModel, self.Senders, SenderRR)
+                self.Receivers = findReceiver.start(self.Sensors, self.myModel, self.sender, SenderRR)
                 sendReceivePackets.start(
-                    self.Sensors, self.myModel, self.Senders, 'Hello', self.Receivers, self.srp, self.rrp, self.sdp,
+                    self.Sensors, self.myModel, self.sender, 'Hello', self.Receivers, self.srp, self.rrp, self.sdp,
                     self.rdp
                 )
 
@@ -246,24 +247,24 @@ class ILEACH:
 
                 # ######## All sensor s data packet to  CH
                 for j in range(len(self.TotalCH)):
-                    self.Receivers = self.TotalCH(j).id
+                    self.Receivers = self.TotalCH[j].id
                     findSender.start(self.Sensors, self.myModel, self.Receivers)
-                    self.Sensors = sendReceivePackets.start(self.Sensors, self.myModel, self.Senders, 'Data',
+                    self.Sensors = sendReceivePackets.start(self.Sensors, self.myModel, self.sender, 'Data',
                                                             self.Receivers)
 
             # ### send Data packet from CH to Sink after Data aggregation
             for i in range(len(self.TotalCH)):
                 self.Receivers = self.n + 1  # #Sink
-                Ser = self.TotalCH[i].id  # #CH
-                self.Sensors = sendReceivePackets.start(self.Sensors, self.myModel, self.Senders, 'Data',
+                Sender = self.TotalCH[i].id  # #CH
+                self.Sensors = sendReceivePackets.start(self.Sensors, self.myModel, self.sender, 'Data',
                                                         self.Receivers)
 
             # send Data packet directly from other nodes(that aren't in each cluster) to Sink
-            for i in range(self.n):
-                if self.Sensors[i].MCH == self.Sensors[n + 1].id:
+            for sensor in self.Sensors:
+                if sensor.MCH == self.Sensors[self.n].id:  # if it is sink
                     self.Receivers = self.n + 1  # #Sink
-                    Ser = self.Sensors(i).id  # #Other Nodes
-                    self.Sensors = sendReceivePackets.start(self.Sensors, self.myModel, self.Senders, 'Data',
+                    Sender = sensor.id  # #Other Nodes
+                    self.Sensors = sendReceivePackets.start(self.Sensors, self.myModel, self.sender, 'Data',
                                                             self.Receivers)
 
             # Todo: STATISTICS
@@ -306,8 +307,3 @@ class ILEACH:
             #
             #     lastPeriod = r
             #     break
-
-
-if __name__ == '__main__':
-    # for n = 5, there will be 5 nodes from 0-4 and one extra sink node, so total 6 nodes
-    myleach = ILEACH(n=5)

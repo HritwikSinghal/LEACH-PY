@@ -1,3 +1,8 @@
+from math import *
+from Base_modules.LEACH_setParameters import *
+from Base_modules.LEACH_configureSensors import *
+
+
 # function Sender=findSender(Sensors,Model,Receiver)
 # %% Standard Leach Developed by Amin Nazari
 # %   aminnazari91@gmail.com
@@ -18,5 +23,5 @@
 #
 # end
 
-def start():
+def start(Sensors: list[Sensor], myModel: Model, Receivers):
     pass

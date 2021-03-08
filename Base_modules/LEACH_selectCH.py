@@ -3,6 +3,11 @@ from Base_modules.LEACH_setParameters import *
 from Base_modules.LEACH_configureSensors import *
 
 
+class ClusterHead:
+    def __init__(self):
+        self.id = -1
+
+
 def zeros(row, column):
     re_list = []
     for x in range(row):
@@ -17,6 +22,7 @@ def zeros(row, column):
 
 def start(Sensors: list[Sensor], myModel: Model, r: int, circlex, circley):
     CH = []
+    CH.append(ClusterHead())
     countCHs = 0
     n = myModel.n
 
@@ -61,7 +67,9 @@ def start(Sensors: list[Sensor], myModel: Model, r: int, circlex, circley):
                     myModel.p / (1 - myModel.p * (r % round(1 / myModel.p)))
             ):
                 countCHs += 1
-                CH[countCHs].id = i  # ok
+                CH.append(ClusterHead())
+                CH[-1].id = i
+                # CH[countCHs].id = i  # ok
                 Sensors[i].type = 'C'
                 Sensors[i].G = round(1 / myModel.p) - 1
 
