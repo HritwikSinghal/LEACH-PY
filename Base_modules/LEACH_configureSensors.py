@@ -29,7 +29,7 @@ def start(Model, n, GX, GY):
         Sensors[i].xd = GX[i]
         # set y location
         Sensors[i].yd = GY[i]
-        # Determinate whether in previous periods has been clusterhead or not? not=0 and be=n
+        # Determinate whether in previous periods a node has been cluster-head or not? not=0 and be=n
         Sensors[i].G = 0
         # dead flag. Whether dead or alive S[i].df=0 alive. S[i].df=1 dead.
         Sensors[i].df = 0

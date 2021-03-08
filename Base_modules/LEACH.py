@@ -3,6 +3,7 @@ from Base_modules import LEACH_selectCH
 from Base_modules import LEACH_setParameters
 from Base_modules import createRandomSen
 from Base_modules import disToSink
+from Base_modules import LEACH_plotter
 from Base_modules import findReceiver
 from Base_modules import findSender
 from Base_modules import joinToNearestCH
@@ -29,6 +30,9 @@ def pp(stuff):
 class ILEACH:
 
     def __init__(self, n=200):
+        # After every "AroundClear" rounds, let every sensor be CH again
+        self.AroundClear = 10
+
         # Create sensor nodes, Set Parameters and Create Energy self.Model
         # ######################### Initial Parameters #######################
         self.n = n  # #Number of Nodes in the field
@@ -76,7 +80,6 @@ class ILEACH:
         print("self.Sender", self.Senders)
         print("self.Receiver ", end='')
         pp(self.Receivers)
-
         var_pp(self.Sensors)
         print('self.srp', self.srp)
         print('self.rrp', self.rrp)
@@ -89,6 +92,7 @@ class ILEACH:
         self.main_loop()
 
         # todo: test
+
         print("AFTER ################# Main loop program #############")
         print('----------------------------------------------')
         exit()
@@ -136,7 +140,7 @@ class ILEACH:
 
     def start_sim(self, n):
         # ############# Start Simulation ##############
-        self.srp = 0  # counter of  number of sent routing packets
+        self.srp = 0  # counter of number of sent routing packets
         self.rrp = 0  # counter of number of receive routing packets
         self.sdp = 0  # counter of number of sent data packets
         self.rdp = 0  # counter of number of receive data packets
@@ -175,31 +179,29 @@ class ILEACH:
             self.sdp = 0  # counter number of sent data packets to sink
             self.rdp = 0  # counter number of receive data packets by sink
 
-            # #initialization per round
+            # initialization per round
             self.SRP[r + 1] = self.srp
             self.RRP[r + 1] = self.rrp
             self.SDP[r + 1] = self.sdp
             self.RDP[r + 1] = self.rdp
 
-            # pause(0.001)  # pause simulation
-            # hold off      # clear figure
-
             # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             # self.packets_TO_BS = 0
 
             resetSensors.start(self.Sensors, self.myModel)
-            # #allow to sensor to become cluster-head. LEACH Algorithm
-            self.AroundClear = 10
+
+            # allow to sensor to become cluster-head. LEACH Algorithm
+
             if r % self.AroundClear == 0:
-                for i in range(self.n):
-                    self.Sensors[i].G = 0
+                for sensor in self.Sensors:
+                    sensor.G = 0
 
             # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% plot Sensors %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             # todo: plot here
-            # self.deadNum, self.circlex, self.circley = LEACH_plotter.start(self.Sensors, self.Model)
+            self.deadNum, self.circlex, self.circley = LEACH_plotter.start(self.Sensors, self.myModel)
 
-            # #Save r'th period When the first node dies
-            if (self.deadNum >= 1) and (self.flag_first_dead == 0):
+            # Save the period in which the first node died
+            if self.deadNum > 0 and self.flag_first_dead == 0:
                 self.first_dead = r
                 self.flag_first_dead = 1
 
@@ -213,8 +215,10 @@ class ILEACH:
                 self.Senders = self.TotalCH[i].id
                 SenderRR = self.myModel.RR
                 self.Receivers = findReceiver.start(self.Sensors, self.myModel, self.Senders, SenderRR)
-                sendReceivePackets.start(self.Sensors, self.myModel, self.Senders, 'Hello', self.Receivers,
-                                         self.srp, self.rrp, self.sdp, self.rdp)
+                sendReceivePackets.start(
+                    self.Sensors, self.myModel, self.Senders, 'Hello', self.Receivers, self.srp, self.rrp, self.sdp,
+                    self.rdp
+                )
 
             # #Sensors join to nearest CH
             joinToNearestCH.start(self.Sensors, self.myModel, self.TotalCH)
@@ -262,7 +266,7 @@ class ILEACH:
                     self.Sensors = sendReceivePackets.start(self.Sensors, self.myModel, self.Senders, 'Data',
                                                             self.Receivers)
 
-            ## Todo: STATISTICS
+            # Todo: STATISTICS
 
             # Sum_DEAD(r + 1) = deadNum
             #

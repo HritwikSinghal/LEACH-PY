@@ -1,4 +1,6 @@
 import random
+from Base_modules.LEACH_setParameters import *
+from Base_modules.LEACH_configureSensors import *
 
 
 def zeros(row, column):
@@ -13,13 +15,13 @@ def zeros(row, column):
     return re_list
 
 
-def start(Sensors, Model, r, circlex, circley):
+def start(Sensors: list[Sensor], myModel: Model, r: int, circlex, circley):
     CH = []
     countCHs = 0
-    n = Model.n
+    n = myModel.n
 
-    # numRx = Model.numRx
-    # dr = Model.dr
+    # numRx = myModel.numRx
+    # dr = myModel.dr
     # CH_selected_arr = zeros(numRx, numRx)
 
     for i in range(n):
@@ -51,14 +53,17 @@ def start(Sensors, Model, r, circlex, circley):
         # if CH_selected_arr[row_circle_of_node][col_circle_of_node] == 1:
         #     continue
 
+        # If current sensor has energy left and has not been CH before
         if Sensors[i].E > 0 and Sensors[i].G <= 0:
             temp_rand = random.uniform(0, 1)
             # %Election of Cluster Heads
-            if temp_rand <= (Model.p / (1 - Model.p * (r % round(1 / Model.p)))):
+            if temp_rand <= (
+                    myModel.p / (1 - myModel.p * (r % round(1 / myModel.p)))
+            ):
                 countCHs += 1
                 CH[countCHs].id = i  # ok
                 Sensors[i].type = 'C'
-                Sensors[i].G = round(1 / Model.p) - 1
+                Sensors[i].G = round(1 / myModel.p) - 1
 
                 # # % mark this cirle now that it has a CH
                 # CH_selected_arr(row_circle_of_node, col_circle_of_node) = 1
