@@ -200,6 +200,7 @@ class LEACH:
             # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% plot Sensors %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             # todo: plot here
             self.deadNum, self.circlex, self.circley = LEACH_plotter.start(self.Sensors, self.myModel)
+            exit()
 
             # Save the period in which the first node died
             if self.deadNum > 0 and self.flag_first_dead == 0:

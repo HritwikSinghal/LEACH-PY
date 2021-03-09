@@ -8,4 +8,4 @@ from Base_modules import LEACH
 
 
 if __name__ == '__main__':
-    myLeach = LEACH.LEACH(n=5)
+    myLeach = LEACH.LEACH(n=200)

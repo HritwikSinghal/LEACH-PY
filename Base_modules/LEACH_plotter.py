@@ -3,10 +3,14 @@ from math import *
 from Base_modules.LEACH_setParameters import *
 from Base_modules.LEACH_configureSensors import *
 
+import matplotlib
+matplotlib.use('TkAgg')
+import matplotlib.pyplot as plt
 
 def start(Sensors: [Sensor], myModel: Model, deadnum=0):
     n = myModel.n
     deadNum = 0
+    plt.plot([Sensors[n].xd], [Sensors[n].yd], 'r^', label="Sink")
 
     # numRx = myModel.numRx
     # zeroarr = [0 for x in range(numRx)]
@@ -32,20 +36,30 @@ def start(Sensors: [Sensor], myModel: Model, deadnum=0):
     #
     # xp = [r * cos(each_angle) for each_angle in angle]
     # yp = [r * sin(each_angle) for each_angle in angle]
-
+    n_flag = True
     for sensor in Sensors:
-        if sensor.E > 0:
-            if sensor.type == 'N':
-                # plot(Sensors(i).xd, Sensors(i).yd, 'ko', 'MarkerSize', 5, 'MarkerFaceColor', 'k');
-                pass  # todo: Plot here
-            else:  # Sensors.type == 'C'
-                # plot(Sensors(i).xd,Sensors(i).yd,'ko', 'MarkerSize', 5, 'MarkerFaceColor', 'r');
-                pass  # todo: Plot here
-        else:
-            deadNum += 1
-            # plot(Sensors(i).xd,Sensors(i).yd,'ko', 'MarkerSize',5, 'MarkerFaceColor', 'w');
-            pass  # todo: plot here
 
+        if n_flag:
+            plt.plot([sensor.xd], [sensor.yd], 'b+', label='Nodes')
+            n_flag = False
+        else:
+            plt.plot([sensor.xd], [sensor.yd], 'b+')
+    #     if sensor.E > 0:
+    #         if sensor.type == 'N':
+    #             # plot(Sensors(i).xd, Sensors(i).yd, 'ko', 'MarkerSize', 5, 'MarkerFaceColor', 'k');
+    #             pass  # todo: Plot here
+    #         else:  # Sensors.type == 'C'
+    #             # plot(Sensors(i).xd,Sensors(i).yd,'ko', 'MarkerSize', 5, 'MarkerFaceColor', 'r');
+    #             pass  # todo: Plot here
+    #     else:
+    #         deadNum += 1
+    #         # plot(Sensors(i).xd,Sensors(i).yd,'ko', 'MarkerSize',5, 'MarkerFaceColor', 'w');
+    #         pass  # todo: plot here
+    plt.title('Network Plot for Leach')
+    plt.xlabel('X [m]')
+    plt.ylabel('Y [m]')
+    plt.legend(loc='upper right')
+    plt.show()
         # hold on
 
     '''
@@ -53,6 +67,8 @@ def start(Sensors: [Sensor], myModel: Model, deadnum=0):
     text(Sensors(n+1).xd+1,Sensors(n+1).yd-1,'Sink');
     axis square
     '''
+
+
 
     # todo: fix this in in Ileach
     return deadNum, [], []
