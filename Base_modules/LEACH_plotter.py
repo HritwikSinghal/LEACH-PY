@@ -1,7 +1,9 @@
-import matplotlib
-
-from Base_modules.LEACH_configure_sensors import *
+from Base_modules import LEACH_set_parameters
+from math import *
 from Base_modules.LEACH_set_parameters import *
+from Base_modules.LEACH_configure_sensors import *
+
+import matplotlib
 
 matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
@@ -9,6 +11,11 @@ import matplotlib.pyplot as plt
 
 # todo: add condition to show sink only as red dot and not both red and blue
 def start(Sensors: [Sensor], myModel: Model, deadnum=0):
+    print('########################################')
+    print('############# plot Sensors #############')
+    print('########################################')
+    print()
+
     n = myModel.n
     deadNum = 0
     plt.plot([Sensors[n].xd], [Sensors[n].yd], 'r^', label="Sink")
