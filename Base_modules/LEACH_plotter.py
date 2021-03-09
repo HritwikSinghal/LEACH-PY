@@ -4,9 +4,12 @@ from Base_modules.LEACH_setParameters import *
 from Base_modules.LEACH_configureSensors import *
 
 import matplotlib
+
 matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 
+
+# todo: add condition to show sink only as red dot and not both red and blue
 def start(Sensors: [Sensor], myModel: Model, deadnum=0):
     n = myModel.n
     deadNum = 0
@@ -60,15 +63,12 @@ def start(Sensors: [Sensor], myModel: Model, deadnum=0):
     plt.ylabel('Y [m]')
     plt.legend(loc='upper right')
     plt.show()
-        # hold on
 
     '''
     plot(Sensors(n+1).xd,Sensors(n+1).yd,'bo', 'MarkerSize', 8, 'MarkerFaceColor', 'b');
     text(Sensors(n+1).xd+1,Sensors(n+1).yd-1,'Sink');
     axis square
     '''
-
-
 
     # todo: fix this in in Ileach
     return deadNum, [], []

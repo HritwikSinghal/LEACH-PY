@@ -2,8 +2,26 @@ from math import *
 from Base_modules.LEACH_setParameters import *
 from Base_modules.LEACH_configureSensors import *
 
+################################################################
+# todo :test
+import pprint
 
-def start(Sensors: list[Sensor], myModel: Model, Senders: list, PacketType: str, Receivers: list, srp, rrp, sdp, rdp):
+
+def var_pp(stuff):
+    pp = pprint.PrettyPrinter(indent=1)
+    for x in stuff:
+        pp.pprint(vars(x))
+
+
+def pp(stuff):
+    pp = pprint.PrettyPrinter(indent=4)
+    pp.pprint(stuff)
+
+
+################################################################
+
+
+def start(Sensors: list[Sensor], myModel: Model, senders: list, PacketType: str, receivers: list, srp, rrp, sdp, rdp):
     sap = 0  # Send a packet or Number of sent packets
     rap = 0  # Receive a packet or Number of received packets
     if PacketType == 'Hello':
@@ -13,8 +31,8 @@ def start(Sensors: list[Sensor], myModel: Model, Senders: list, PacketType: str,
 
     # Energy dissipated from Sensors for Sending a packet
     # Each sender will send to each receiver
-    for sender in Senders:
-        for receiver in Receivers:
+    for sender in senders:
+        for receiver in receivers:
             # calculate euclidean distance between sender and receiver
             distance = sqrt(
                 pow(Sensors[sender].xd - Sensors[receiver].xd, 2) + pow(Sensors[sender].yd - Sensors[receiver].yd, 2)
@@ -34,11 +52,11 @@ def start(Sensors: list[Sensor], myModel: Model, Senders: list, PacketType: str,
                     sap += 1
 
     # Energy dissipated from receivers for Receiving a packet
-    for receiver in Receivers:
+    for receiver in receivers:
         Sensors[receiver].E -= (myModel.ERX + myModel.EDA) * PacketSize
 
-    for sender in Senders:
-        for receiver in Receivers:
+    for sender in senders:
+        for receiver in receivers:
             # Received a Packet
             if Sensors[sender].E > 0 and Sensors[receiver].E > 0:
                 rap += 1

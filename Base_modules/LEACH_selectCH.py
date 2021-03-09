@@ -3,11 +3,6 @@ from Base_modules.LEACH_setParameters import *
 from Base_modules.LEACH_configureSensors import *
 
 
-class ClusterHead:
-    def __init__(self):
-        self.id = -1
-
-
 def zeros(row, column):
     re_list = []
     for x in range(row):
@@ -22,8 +17,7 @@ def zeros(row, column):
 
 def start(Sensors: list[Sensor], myModel: Model, r: int, circlex, circley):
     CH = []
-    CH.append(ClusterHead())
-    countCHs = 0
+    # countCHs = 0 # no use
     n = myModel.n
 
     # numRx = myModel.numRx
@@ -62,18 +56,17 @@ def start(Sensors: list[Sensor], myModel: Model, r: int, circlex, circley):
         # If current sensor has energy left and has not been CH before
         if Sensors[i].E > 0 and Sensors[i].G <= 0:
             temp_rand = random.uniform(0, 1)
-            # %Election of Cluster Heads
+            # Election of Cluster Heads
             if temp_rand <= (
                     myModel.p / (1 - myModel.p * (r % round(1 / myModel.p)))
             ):
-                countCHs += 1
-                CH.append(ClusterHead())
-                CH[-1].id = i
+                # countCHs += 1
+                CH.append(Sensors[i].id)
                 # CH[countCHs].id = i  # ok
                 Sensors[i].type = 'C'
                 Sensors[i].G = round(1 / myModel.p) - 1
 
-                # # % mark this cirle now that it has a CH
+                # # mark this cirle now that it has a CH
                 # CH_selected_arr(row_circle_of_node, col_circle_of_node) = 1
 
     return CH

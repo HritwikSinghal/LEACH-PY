@@ -1,10 +1,13 @@
 from math import *
+from Base_modules.LEACH_setParameters import *
+from Base_modules.LEACH_configureSensors import *
 
 
 def zeros(row, column):
     re_list = []
     for x in range(row):
-        temp_list = [0 for _ in range(column)]
+        # FindReceiver specific modification
+        temp_list = [float(0) for _ in range(column)]
         if row == 1:
             re_list.extend(temp_list)
         else:
@@ -13,20 +16,19 @@ def zeros(row, column):
     return re_list
 
 
-def start(Sensors, Model, Sender, SenderRR):
+def start(Sensors: list[Sensor], myModel: Model, sender, senderRR):
     Receiver = []
 
     # Calculate Distance All Sensor With Sender
     # [Note that for doing so you need to access the global fig variable]
-    n = Model.n
-    D = zeros(1, n)
+    n = myModel.n
+    distance = zeros(1, n)
 
     for i in range(n):
-        D[i] = sqrt((Sensors[i].xd - Sensors[Sender].xd) ^ 2 + (Sensors[i].yd - Sensors[Sender].yd) ^ 2)
-
-    for i in range(n):
-        if D[i] <= SenderRR & Sender != Sensors[i].id:
-            # todo: what does below do?
-            Receiver = [Receiver, Sensors[i].id]  # ok
+        distance[i] = sqrt(
+            pow(Sensors[i].xd - Sensors[sender].xd, 2) + pow(Sensors[i].yd - Sensors[sender].yd, 2)
+        )
+        if distance[i] <= senderRR and sender != Sensors[i].id:
+            Receiver.append(Sensors[i].id)
 
     return Receiver

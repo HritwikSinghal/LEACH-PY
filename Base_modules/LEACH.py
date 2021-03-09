@@ -33,6 +33,7 @@ class LEACH:
     def __init__(self, n=200):
         # After every "AroundClear" rounds, let every sensor be CH again
         self.AroundClear = 10
+        self.countCHs = 0  # counter for CHs
 
         # Create sensor nodes, Set Parameters and Create Energy self.Model
         # ######################### Initial Parameters #######################
@@ -80,7 +81,7 @@ class LEACH:
         # todo: test
         print("self.Sender", self.sender)
         print("self.Receiver ", end='')
-        pp(self.Receivers)
+        pp(self.receivers)
         var_pp(self.Sensors)
         print('self.srp', self.srp)
         print('self.rrp', self.rrp)
@@ -93,7 +94,6 @@ class LEACH:
         self.main_loop()
 
         # todo: test
-
         print("AFTER ################# Main loop program #############")
         print('----------------------------------------------')
         exit()
@@ -109,7 +109,7 @@ class LEACH:
 
     def init_param(self):
         # ################# Parameters initialization #############
-        self.countCHs = 0  # counter for CHs
+        # self.countCHs = 0  # counter for CHs      # Declared in __init__
         self.flag_first_dead = 0  # flag_first_dead
         self.deadNum = 0  # Number of dead nodes
 
@@ -118,10 +118,11 @@ class LEACH:
             self.initEnergy += sensor.E
 
         # Below will be of length(Max_rounds) so each element will store the total packets in each round
-        self.SRP = self.zeros(1, self.myModel.rmax)  # number of sent routing packets
-        self.RRP = self.zeros(1, self.myModel.rmax)  # number of receive routing packets
-        self.SDP = self.zeros(1, self.myModel.rmax)  # number of sent data packets
-        self.RDP = self.zeros(1, self.myModel.rmax)  # number of receive data packets
+        # the length is rmax + 1 since we take one initialization round also.
+        self.SRP = self.zeros(1, self.myModel.rmax + 1)  # number of sent routing packets
+        self.RRP = self.zeros(1, self.myModel.rmax + 1)  # number of receive routing packets
+        self.SDP = self.zeros(1, self.myModel.rmax + 1)  # number of sent data packets
+        self.RDP = self.zeros(1, self.myModel.rmax + 1)  # number of receive data packets
 
         # total_energy_dissipated = zeros(1,Model.rmax)
         self.Sum_DEAD = self.zeros(1, self.myModel.rmax)
@@ -148,10 +149,10 @@ class LEACH:
 
         # Sink broadcast 'Hello' message to all nodes
         self.sender = [self.n]  # List of senders, for start_sim, sink will send hello packet to all
-        self.Receivers = [x for x in range(n)]  # List of senders, for start_sim, All nodes will receive from sink
+        self.receivers = [x for x in range(n)]  # List of senders, for start_sim, All nodes will receive from sink
 
         self.srp, self.rrp, self.sdp, self.rdp = sendReceivePackets.start(
-            self.Sensors, self.myModel, self.sender, 'Hello', self.Receivers, self.srp, self.rrp, self.sdp, self.rdp
+            self.Sensors, self.myModel, self.sender, 'Hello', self.receivers, self.srp, self.rrp, self.sdp, self.rdp
         )
 
         # All sensors location information to Sink .
@@ -166,7 +167,7 @@ class LEACH:
         self.x = 0
 
     def main_loop(self):
-        for r in range(self.myModel.rmax):
+        for r in range(1, self.myModel.rmax + 1):
 
             # ####### Initialization #######
 
@@ -181,10 +182,10 @@ class LEACH:
             self.rdp = 0  # counter number of receive data packets by sink
 
             # initialization per round
-            self.SRP[r + 1] = self.srp
-            self.RRP[r + 1] = self.rrp
-            self.SDP[r + 1] = self.sdp
-            self.RDP[r + 1] = self.rdp
+            self.SRP[r] = self.srp
+            self.RRP[r] = self.rrp
+            self.SDP[r] = self.sdp
+            self.RDP[r] = self.rdp
 
             # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             # self.packets_TO_BS = 0
@@ -192,15 +193,12 @@ class LEACH:
             resetSensors.start(self.Sensors, self.myModel)
 
             # allow to sensor to become cluster-head. LEACH Algorithm
-
             if r % self.AroundClear == 0:
                 for sensor in self.Sensors:
                     sensor.G = 0
 
             # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% plot Sensors %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-            # todo: plot here
             self.deadNum, self.circlex, self.circley = LEACH_plotter.start(self.Sensors, self.myModel)
-            exit()
 
             # Save the period in which the first node died
             if self.deadNum > 0 and self.flag_first_dead == 0:
@@ -209,23 +207,33 @@ class LEACH:
 
             # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% cluster head election %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             # Selection Candidate Cluster Head Based on LEACH Set-up Phase
-            # todo: fix this
             self.TotalCH = LEACH_selectCH.start(self.Sensors, self.myModel, r, self.circlex, self.circley)
 
-            # Broadcasting CHs to All Sensors that are in Radio Rage CH.
-            for i in range(len(self.TotalCH)):
-                self.sender = self.TotalCH[i].id
-                SenderRR = self.myModel.RR
-                self.Receivers = findReceiver.start(self.Sensors, self.myModel, self.sender, SenderRR)
-                sendReceivePackets.start(
-                    self.Sensors, self.myModel, self.sender, 'Hello', self.Receivers, self.srp, self.rrp, self.sdp,
-                    self.rdp
-                )
+            # todo: test
+            print('self.TotalCH: ', end='')
+            pp(self.TotalCH)
+            print()
 
-            # #Sensors join to nearest CH
+            # Broadcasting CHs to All Sensors that are in Radio Rage CH.
+            # each CH will broadcast to all nodes within its range.
+            for ch_id in self.TotalCH:
+                senderRR = self.myModel.RR  # Radio range of sender
+                self.receivers: list = findReceiver.start(self.Sensors, self.myModel, ch_id, senderRR)
+
+                # todo: test
+                print("sender: ", ch_id)
+                print('self.Receivers: ', end='')
+                print(self.receivers)
+
+                # we require the sender parameter of sendReceivePackets.start to be a list.
+                sendReceivePackets.start(
+                    self.Sensors, self.myModel, [ch_id], 'Hello', self.receivers, self.srp, self.rrp, self.sdp, self.rdp
+                )
+            exit()
+            # Sensors join to nearest CH
             joinToNearestCH.start(self.Sensors, self.myModel, self.TotalCH)
 
-            # %%%%%%%%%%%%%%%%%%%%%%% end of cluster head election phase %%%%%%
+            # %%%%%%%%%%%%%%%%%%%%%%% end of cluster head election phase %%%%%%%%%%%%%%%%%%%%%%%
 
             # %%%%%%%%%%%%%%%%%%%%%%% plot network status in end of set-up phase
             # %%%%%%%%%%%%%%%%%%%%%%% this will draw lines from every node to its CH
@@ -248,36 +256,36 @@ class LEACH:
 
                 # ######## All sensor s data packet to  CH
                 for j in range(len(self.TotalCH)):
-                    self.Receivers = self.TotalCH[j].id
-                    findSender.start(self.Sensors, self.myModel, self.Receivers)
+                    self.receivers = self.TotalCH[j].id
+                    findSender.start(self.Sensors, self.myModel, self.receivers)
                     self.Sensors = sendReceivePackets.start(self.Sensors, self.myModel, self.sender, 'Data',
-                                                            self.Receivers)
+                                                            self.receivers)
 
             # ### send Data packet from CH to Sink after Data aggregation
             for i in range(len(self.TotalCH)):
-                self.Receivers = self.n + 1  # #Sink
+                self.receivers = self.n + 1  # #Sink
                 Sender = self.TotalCH[i].id  # #CH
                 self.Sensors = sendReceivePackets.start(self.Sensors, self.myModel, self.sender, 'Data',
-                                                        self.Receivers)
+                                                        self.receivers)
 
             # send Data packet directly from other nodes(that aren't in each cluster) to Sink
             for sensor in self.Sensors:
                 if sensor.MCH == self.Sensors[self.n].id:  # if it is sink
-                    self.Receivers = self.n + 1  # #Sink
+                    self.receivers = self.n + 1  # #Sink
                     Sender = sensor.id  # #Other Nodes
                     self.Sensors = sendReceivePackets.start(self.Sensors, self.myModel, self.sender, 'Data',
-                                                            self.Receivers)
+                                                            self.receivers)
 
             # Todo: STATISTICS
 
-            # Sum_DEAD(r + 1) = deadNum
+            # Sum_DEAD(r) = deadNum
             #
-            # SRP(r + 1) = srp
-            # RRP(r + 1) = rrp
-            # SDP(r + 1) = sdp
-            # RDP(r + 1) = rdp
+            # SRP(r) = srp
+            # RRP(r) = rrp
+            # SDP(r) = sdp
+            # RDP(r) = rdp
             #
-            # CLUSTERHS(r + 1) = countCHs
+            # CLUSTERHS(r) = countCHs
             #
             # alive = 0
             # SensorEnergy = 0
@@ -288,20 +296,20 @@ class LEACH:
             #
             # AliveSensors(r) = alive  # #ok
             #
-            # SumEnergyAllSensor(r + 1) = SensorEnergy  # #ok
+            # SumEnergyAllSensor(r) = SensorEnergy  # #ok
             #
-            # AvgEnergyAllSensor(r + 1) = SensorEnergy / alive  # #ok
+            # AvgEnergyAllSensor(r) = SensorEnergy / alive  # #ok
             #
-            # ConsumEnergy(r + 1) = (initEnergy - SumEnergyAllSensor(r + 1)) / n  # #ok
+            # ConsumEnergy(r) = (initEnergy - SumEnergyAllSensor(r)) / n  # #ok
             #
             # En = 0
             # for i=1:n
             # if self.Sensors(i).E > 0
-            #     En = En + (Sensors(i).E - AvgEnergyAllSensor(r + 1)) ^ 2
+            #     En = En + (Sensors(i).E - AvgEnergyAllSensor(r)) ^ 2
             #
-            # Enheraf(r + 1) = En / alive  # #ok
+            # Enheraf(r) = En / alive  # #ok
             #
-            # title(sprintf('Round=##d,Dead nodes=##d', r + 1, deadNum))
+            # title(sprintf('Round=##d,Dead nodes=##d', r, deadNum))
             #
             # # #dead
             # if (n == deadNum)
