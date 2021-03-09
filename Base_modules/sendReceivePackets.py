@@ -3,7 +3,7 @@ from Base_modules.LEACH_setParameters import *
 from Base_modules.LEACH_configureSensors import *
 
 ################################################################
-# todo :test
+# todo :test, for debugging
 import pprint
 
 
@@ -71,7 +71,7 @@ def start(Sensors: list[Sensor], myModel: Model, senders: list, PacketType: str,
     return srp, rrp, sdp, rdp
 
 
-# todo: implement this
+# todo: implement this or see if this is implemented in joinToNearestCH
 '''
 
 %     else %To Cluster Head
