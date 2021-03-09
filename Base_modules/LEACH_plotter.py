@@ -1,9 +1,7 @@
-from Base_modules import LEACH_setParameters
-from math import *
-from Base_modules.LEACH_setParameters import *
-from Base_modules.LEACH_configureSensors import *
-
 import matplotlib
+
+from Base_modules.LEACH_configure_sensors import *
+from Base_modules.LEACH_set_parameters import *
 
 matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt

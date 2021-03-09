@@ -1,11 +1,11 @@
-from math import *
-from Base_modules.LEACH_setParameters import *
-from Base_modules.LEACH_configureSensors import *
+import pprint
+
+from Base_modules.LEACH_configure_sensors import *
+from Base_modules.LEACH_set_parameters import *
+
 
 ################################################################
 # todo :test, for debugging
-import pprint
-
 
 def var_pp(stuff):
     pp = pprint.PrettyPrinter(indent=1)

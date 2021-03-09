@@ -24,7 +24,7 @@ class Model:
         self.Eo = 2
 
         # ETX = Energy dissipated in Transmission, ERX = in Receive
-        # Eelec=Etx=Erx
+        self.Eelec = 50 * 0.000000001
         self.ETX = 50 * 0.000000001
         self.ERX = 50 * 0.000000001
 
@@ -59,7 +59,7 @@ class Model:
         # %%%%%%%%%%%%%%%%%%%%%%%%% END OF PARAMETERS %%%%%%%%%%%%%%%%%%%%%%%%
 
 
-def setParameters(n):
+def start(n):
     myArea = Area()
     myModel = Model(n, myArea.x, myArea.y)
 
