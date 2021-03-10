@@ -1,6 +1,6 @@
 import random
 
-from Base_modules.LEACH_set_parameters import *
+from src.LEACH_set_parameters import *
 
 
 def generate_x_y(myModel: Model, myArea: Area):

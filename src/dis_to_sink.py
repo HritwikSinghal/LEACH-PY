@@ -1,6 +1,6 @@
 from math import *
-from Base_modules.LEACH_set_parameters import *
-from Base_modules.LEACH_configure_sensors import *
+from src.LEACH_set_parameters import *
+from src.LEACH_configure_sensors import *
 
 
 def start(Sensors: list[Sensor], myModel: Model):

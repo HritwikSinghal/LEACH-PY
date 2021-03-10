@@ -1,16 +1,16 @@
 import pprint
 
-from Base_modules import LEACH_configure_sensors
-from Base_modules import LEACH_plotter
-from Base_modules import LEACH_select_ch
-from Base_modules import LEACH_set_parameters
-from Base_modules import create_random_sensors
-from Base_modules import dis_to_sink
-from Base_modules import findReceiver
-from Base_modules import find_sender
-from Base_modules import join_to_nearest_ch
-from Base_modules import reset_sensors
-from Base_modules import send_receive_packets
+from src import LEACH_configure_sensors
+from src import LEACH_plotter
+from src import LEACH_select_ch
+from src import LEACH_set_parameters
+from src import create_random_sensors
+from src import dis_to_sink
+from src import findReceiver
+from src import find_sender
+from src import join_to_nearest_ch
+from src import reset_sensors
+from src import send_receive_packets
 
 
 # #################################################
@@ -48,28 +48,24 @@ class LEACH:
         self.AroundClear = 1 / self.myModel.p  # After every "AroundClear" rounds, let every sensor be CH again
         self.n = n  # Number of Nodes in the field
 
-        # ###########################################
-        # ############# From init_param #############
-        # ###########################################
+        # ##########################################
+        # ############# For init_param #############
+        # ##########################################
         self.deadNum = 0  # Number of dead nodes
 
-        # ##########################################
-        # ############# From start_sim #############
-        # ##########################################
+        # #########################################
+        # ############# For start_sim #############
+        # #########################################
         # counter for bit transmitted to Bases Station and Cluster Heads
         self.srp = 0  # counter number of sent routing packets
         self.rrp = 0  # counter number of receive routing packets
         self.sdp = 0  # counter number of sent data packets to sink
         self.rdp = 0  # counter number of receive data packets by sink
-
-        # ##########################################
-        # ############# From start_sim #############
-        # ##########################################
         self.x = 0
 
-        # #############################################
-        # ############# From steady state #############
-        # #############################################
+        # ############################################
+        # ############# For steady state #############
+        # ############################################
         # This section Operate for each epoch
         self.member = []  # Member of each cluster in per period      # Not used
         self.countCHs = 0  # Number of CH in per period               # Not Used

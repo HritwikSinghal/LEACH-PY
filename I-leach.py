@@ -4,7 +4,7 @@
 # %% Improved Leach Developed by Hritwik Singhal and Nishita Agarwal
 # However this Python code is Created entirely by Hritwik and Nishita
 
-from Base_modules import LEACH
+from src import LEACH
 
 if __name__ == '__main__':
     myLeach = LEACH.LEACH(n=5)
