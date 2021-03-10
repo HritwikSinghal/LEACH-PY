@@ -271,7 +271,7 @@ class LEACHSimulation:
 
         for round_number in range(1, self.myModel.rmax + 1):
             print('#####################################')
-            print('############# Round {} #############'.format(round_number))
+            print(f'############# Round {round_number} #############')
             print('#####################################')
 
             # ##########################################
@@ -286,6 +286,7 @@ class LEACHSimulation:
 
             # Save the period in which the first node died
             if self.deadNum > 0 and self.flag_first_dead == 0:
+                print(f'first dead in round: {round_number}')
                 self.first_dead = round_number
                 self.flag_first_dead = 1
 
@@ -372,6 +373,7 @@ class LEACHSimulation:
         self.AroundClear = 1 / self.myModel.p  # After every "AroundClear" rounds, let every sensor be CH again
         if round_number % self.AroundClear == 0:
             for sensor in self.Sensors:
+                print(f'setting G=0 for {sensor.id}')
                 sensor.G = 0
 
         # todo: test
@@ -392,6 +394,8 @@ class LEACHSimulation:
         # todo: test
         print('self.list_CH: ', end='')
         pp(self.list_CH)
+        # if round_number == 0 and len(self.list_CH) == 0:
+        #     exit("EXIT")
         print()
 
         # #####################################################################################

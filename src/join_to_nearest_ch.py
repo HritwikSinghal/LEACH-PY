@@ -73,12 +73,12 @@ def start(Sensors: list[Sensor], myModel: Model, TotalCH):
         print(id_of_min_dist_ch)
 
         # for every node, check from which
-        for i in range(total_nodes):
-            if Sensors[i].E > 0:
+        for i, sensor in enumerate(Sensors[:-1]):
+            if sensor.E > 0:
                 # if node is in RR CH and is Nearer to CH rather than Sink
-                if min_dist_from_all_ch[i] <= myModel.RR and min_dist_from_all_ch[i] < Sensors[i].dis2sink:
-                    Sensors[i].MCH = TotalCH[id_of_min_dist_ch[i]]
-                    Sensors[i].dis2ch = min_dist_from_all_ch[i]
+                if min_dist_from_all_ch[i] <= myModel.RR and min_dist_from_all_ch[i] < sensor.dis2sink:
+                    sensor.MCH = TotalCH[id_of_min_dist_ch[i]]
+                    sensor.dis2ch = min_dist_from_all_ch[i]
                 else:
-                    Sensors[i].MCH = total_nodes
-                    Sensors[i].dis2ch = Sensors[i].dis2sink
+                    sensor.MCH = total_nodes
+                    sensor.dis2ch = Sensors[i].dis2sink

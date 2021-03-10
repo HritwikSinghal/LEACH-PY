@@ -24,21 +24,21 @@ def start(Sensors: list[Sensor], myModel: Model, senders: list, PacketType: str,
 
             if distance > myModel.do:
                 Sensors[sender].E -= myModel.ETX * PacketSize + myModel.Emp * PacketSize * pow(distance, 4)
-                print(f'{sender} sent packet to {receiver}. New energy of sender = {Sensors[sender].E}')
+                print(f'{sender} sent packet to {receiver}. New energy of {sender} = {Sensors[sender].E}')
             else:
                 Sensors[sender].E -= myModel.ETX * PacketSize + myModel.Efs * PacketSize * pow(distance, 4)
-                print(f'{sender} sent packet to {receiver}. New energy of sender = {Sensors[sender].E}')
+                print(f'{sender} sent packet to {receiver}. New energy of {sender} = {Sensors[sender].E}')
 
             # Send a packet and increment counter by 1
             if Sensors[sender].E > 0:
                 sap += 1
 
-    # Energy dissipated from receivers for Receiving a packet
-    for receiver in receivers:
-        Sensors[receiver].E -= (myModel.ERX + myModel.EDA) * PacketSize
-
     for sender in senders:
         for receiver in receivers:
+            # Energy dissipated from receivers for Receiving a packet
+            Sensors[receiver].E -= (myModel.ERX + myModel.EDA) * PacketSize
+            print(f'\nnew energy of {receiver} = {Sensors[receiver].E}')
+
             # Received a Packet
             if Sensors[sender].E > 0 and Sensors[receiver].E > 0:
                 print(f'{receiver} recieved a packet from {sender}')

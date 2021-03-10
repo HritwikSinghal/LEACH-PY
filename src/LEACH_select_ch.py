@@ -15,7 +15,7 @@ def zeros(row, column):
     return re_list
 
 
-def start(Sensors: list[Sensor], myModel: Model, r: int, circlex, circley):
+def start(Sensors: list[Sensor], myModel: Model, round_number: int, circlex, circley):
     CH = []
     # countCHs = 0 # no use
     n = myModel.n
@@ -24,7 +24,8 @@ def start(Sensors: list[Sensor], myModel: Model, r: int, circlex, circley):
     # dr = myModel.dr
     # CH_selected_arr = zeros(numRx, numRx)
 
-    for i in range(n):
+    # sink can't be a CH
+    for senser in Sensors[:-1]:
 
         # # % these are the circle (x,y) for this node
         # row_circle_of_node = -1
@@ -54,17 +55,18 @@ def start(Sensors: list[Sensor], myModel: Model, r: int, circlex, circley):
         #     continue
 
         # If current sensor has energy left and has not been CH before
-        if Sensors[i].E > 0 and Sensors[i].G <= 0:
-            temp_rand = random.uniform(0, 1)
+        if senser.E > 0 and senser.G <= 0:
             # Election of Cluster Heads
-            if temp_rand <= (
-                    myModel.p / (1 - myModel.p * (r % round(1 / myModel.p)))
-            ):
+            temp_rand = random.uniform(0, 1)
+            value = myModel.p / (1 - myModel.p * (round_number % round(1 / myModel.p)))
+            print(f'for {senser.id}, temprand = {temp_rand}, value = {value}')
+            if temp_rand <= value:
                 # countCHs += 1
-                CH.append(Sensors[i].id)
+                print(f"Adding {senser.id} to CH")
+                CH.append(senser.id)
                 # CH[countCHs].id = i  # ok
-                Sensors[i].type = 'C'
-                Sensors[i].G = round(1 / myModel.p) - 1
+                senser.type = 'C'
+                senser.G = round(1 / myModel.p) - 1
 
                 # # mark this cirle now that it has a CH
                 # CH_selected_arr(row_circle_of_node, col_circle_of_node) = 1
