@@ -39,8 +39,9 @@ class Model:
         self.do = sqrt(self.Efs / self.Emp)
 
         # %%%%%%%%%%%%%%%%%%%%%%%%% Run Time Parameters %%%%%%%%%%%%%%%%%%%%%%%%%
+        # todo : change this to 200
         # maximum number of rounds
-        self.rmax = 200
+        self.rmax = 10
 
         # Data packet size
         self.DpacketLen = 4000
@@ -48,6 +49,7 @@ class Model:
         # Hello packet size
         self.HpacketLen = 100
 
+        # todo : change this to 10
         # Number of Packets sent in steady-state phase
         self.NumPacket = 1
 

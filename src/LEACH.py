@@ -553,11 +553,11 @@ class LEACHSimulation:
         self.Enheraf = zeros(1, self.myModel.rmax + 1)
 
         self.Sum_DEAD[round_number] = self.deadNum
+        self.CLUSTERHS[round_number] = self.countCHs
         self.SRP[round_number] = self.srp
         self.RRP[round_number] = self.rrp
         self.SDP[round_number] = self.sdp
         self.RDP[round_number] = self.rdp
-        self.CLUSTERHS[round_number] = self.countCHs
 
         self.alive = 0
         sum_energy_all_nodes_in_curr_round = 0
@@ -588,8 +588,19 @@ class LEACHSimulation:
         # title(sprintf('Round=##d,Dead nodes=##d', round_number, deadNum))
 
         # todo: test
-        print("self.total_energy_dissipated", self.total_energy_dissipated)
-        print("self.Sum_DEAD", self.Sum_DEAD)
-        print("self.CLUSTERHS", self.CLUSTERHS)
-        print("self.AllSensorEnergy", self.AllSensorEnergy)
+        print("self.SRP", self.SRP)
+        print("len(self.SRP)", len(self.SRP))
+        print("self.RRP", self.RRP)
+        print("self.SDP", self.SDP)
+        print("self.RDP", self.RDP)
+        print('----------------------------------------------')
+        print('self.total_energy_dissipated', self.total_energy_dissipated)
+        print('self.Sum_DEAD', self.Sum_DEAD)
+        print('self.CLUSTERHS', self.CLUSTERHS)
+        print('self.AllSensorEnergy', self.AllSensorEnergy)
+        print('self.alive_sensors', self.alive_sensors)
+        print('self.sum_energy_all_nodes', self.sum_energy_all_nodes)
+        print('self.avg_energy_All_sensor', self.avg_energy_All_sensor)
+        print('self.consumed_energy', self.consumed_energy)
+        print('self.Enheraf', self.Enheraf)
         print('----------------------------------------------')
