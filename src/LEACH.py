@@ -552,14 +552,17 @@ class LEACHSimulation:
 
         self.alive = 0
         SensorEnergy = 0
-        for i in range(self.n):
-            if self.Sensors[i].E > 0:
+        for sensor in self.Sensors:
+            if sensor.E > 0:
                 self.alive += 1
-                SensorEnergy += self.Sensors[i].E
+                SensorEnergy += sensor.E
 
         self.AliveSensors[round_number] = self.alive  # ok
         self.SumEnergyAllSensor[round_number] = SensorEnergy  # #ok
-        self.AvgEnergyAllSensor[round_number] = SensorEnergy / self.alive  # #ok
+        if self.alive:
+            self.AvgEnergyAllSensor[round_number] = SensorEnergy / self.alive  # #ok
+        else:
+            self.AvgEnergyAllSensor[round_number] = 0
         self.ConsumEnergy[round_number] = (self.initEnergy - self.SumEnergyAllSensor[round_number]) / self.n  # #ok
 
         En = 0
