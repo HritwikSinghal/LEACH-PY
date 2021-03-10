@@ -332,49 +332,7 @@ class LEACHSimulation:
             # ######################################
             # ############# STATISTICS #############
             # ######################################
-
-            # Used in Statistics
-            self.total_energy_dissipated = zeros(1, self.myModel.rmax)
-            self.Sum_DEAD = zeros(1, self.myModel.rmax)
-            self.CLUSTERHS = zeros(1, self.myModel.rmax)
-            self.AllSensorEnergy = zeros(1, self.myModel.rmax)
-            self.AliveSensors = zeros(1, self.myModel.rmax)
-            self.SumEnergyAllSensor = zeros(1, self.myModel.rmax)
-            self.AvgEnergyAllSensor = zeros(1, self.myModel.rmax)
-            self.ConsumEnergy = zeros(1, self.myModel.rmax)
-            self.Enheraf = zeros(1, self.myModel.rmax)
-
-            self.Sum_DEAD[round_number] = self.deadNum
-
-            self.SRP[round_number] = self.srp
-            self.RRP[round_number] = self.rrp
-            self.SDP[round_number] = self.sdp
-            self.RDP[round_number] = self.rdp
-
-            self.CLUSTERHS[round_number] = self.countCHs
-
-            alive = 0
-            SensorEnergy = 0
-            for i in range(self.n):
-                if self.Sensors[i].E > 0:
-                    alive += 1
-                    SensorEnergy += self.Sensors[i].E
-
-            self.AliveSensors[round_number] = alive  # ok
-            self.SumEnergyAllSensor[round_number] = SensorEnergy  # #ok
-
-            self.AvgEnergyAllSensor[round_number] = SensorEnergy / alive  # #ok
-            self.ConsumEnergy[round_number] = (self.initEnergy - self.SumEnergyAllSensor[round_number]) / self.n  # #ok
-
-            En = 0
-            for i in range(self.n):
-                if self.Sensors[i].E > 0:
-                    En += pow((self.Sensors[i].E - self.AvgEnergyAllSensor[round_number]), 2)
-
-            self.Enheraf[round_number] = En / alive  # #ok
-
-            # todo: maybe this is related to graph
-            # title(sprintf('Round=##d,Dead nodes=##d', round_number, deadNum))
+            self.statistics(round_number)
 
             # dead
             if self.n == self.deadNum:
@@ -578,3 +536,46 @@ class LEACHSimulation:
                 self.srp, self.rrp, self.sdp, self.rdp = send_receive_packets.start(
                     self.Sensors, self.myModel, sender, 'Data', self.receivers, self.srp, self.rrp, self.sdp, self.rdp
                 )
+
+    def statistics(self, round_number):
+        print('# ######################################')
+        print('# ############# STATISTICS #############')
+        print('# ######################################')
+
+        self.total_energy_dissipated = zeros(1, self.myModel.rmax)
+        self.Sum_DEAD = zeros(1, self.myModel.rmax)
+        self.CLUSTERHS = zeros(1, self.myModel.rmax)
+        self.AllSensorEnergy = zeros(1, self.myModel.rmax)
+        self.AliveSensors = zeros(1, self.myModel.rmax)
+        self.SumEnergyAllSensor = zeros(1, self.myModel.rmax)
+        self.AvgEnergyAllSensor = zeros(1, self.myModel.rmax)
+        self.ConsumEnergy = zeros(1, self.myModel.rmax)
+        self.Enheraf = zeros(1, self.myModel.rmax)
+
+        self.Sum_DEAD[round_number] = self.deadNum
+        self.SRP[round_number] = self.srp
+        self.RRP[round_number] = self.rrp
+        self.SDP[round_number] = self.sdp
+        self.RDP[round_number] = self.rdp
+        self.CLUSTERHS[round_number] = self.countCHs
+
+        self.alive = 0
+        SensorEnergy = 0
+        for i in range(self.n):
+            if self.Sensors[i].E > 0:
+                self.alive += 1
+                SensorEnergy += self.Sensors[i].E
+
+        self.AliveSensors[round_number] = self.alive  # ok
+        self.SumEnergyAllSensor[round_number] = SensorEnergy  # #ok
+        self.AvgEnergyAllSensor[round_number] = SensorEnergy / self.alive  # #ok
+        self.ConsumEnergy[round_number] = (self.initEnergy - self.SumEnergyAllSensor[round_number]) / self.n  # #ok
+
+        En = 0
+        for i in range(self.n):
+            if self.Sensors[i].E > 0:
+                En += pow((self.Sensors[i].E - self.AvgEnergyAllSensor[round_number]), 2)
+
+        self.Enheraf[round_number] = En / self.alive  # #ok
+        # todo: maybe this is related to graph
+        # title(sprintf('Round=##d,Dead nodes=##d', round_number, deadNum))
