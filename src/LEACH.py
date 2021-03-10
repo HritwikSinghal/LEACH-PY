@@ -75,6 +75,11 @@ class LEACHSimulation:
         self.member = []  # Member of each cluster in per period      # Not used
         self.countCHs = 0  # Number of CH in per period               # Not Used
 
+        # ##########################################
+        # ############# For statistics #############
+        # ##########################################
+        self.alive = 0
+
     def start(self):
         print("#################################")
         print("############# Start #############")
@@ -537,10 +542,10 @@ class LEACHSimulation:
         self.Sum_DEAD = zeros(1, self.myModel.rmax)
         self.CLUSTERHS = zeros(1, self.myModel.rmax)
         self.AllSensorEnergy = zeros(1, self.myModel.rmax)
-        self.AliveSensors = zeros(1, self.myModel.rmax)
-        self.SumEnergyAllSensor = zeros(1, self.myModel.rmax)
-        self.AvgEnergyAllSensor = zeros(1, self.myModel.rmax)
-        self.ConsumEnergy = zeros(1, self.myModel.rmax)
+        self.alive_sensors = zeros(1, self.myModel.rmax)
+        self.sum_energy_all_nodes = zeros(1, self.myModel.rmax)
+        self.avg_energy_All_sensor = zeros(1, self.myModel.rmax)
+        self.consumed_energy = zeros(1, self.myModel.rmax)
         self.Enheraf = zeros(1, self.myModel.rmax)
 
         self.Sum_DEAD[round_number] = self.deadNum
@@ -551,26 +556,30 @@ class LEACHSimulation:
         self.CLUSTERHS[round_number] = self.countCHs
 
         self.alive = 0
-        SensorEnergy = 0
+        sum_energy_all_nodes_in_curr_round = 0
         for sensor in self.Sensors:
             if sensor.E > 0:
                 self.alive += 1
-                SensorEnergy += sensor.E
+                sum_energy_all_nodes_in_curr_round += sensor.E
 
-        self.AliveSensors[round_number] = self.alive  # ok
-        self.SumEnergyAllSensor[round_number] = SensorEnergy  # #ok
+        self.alive_sensors[round_number] = self.alive
+        self.sum_energy_all_nodes[round_number] = sum_energy_all_nodes_in_curr_round
         if self.alive:
-            self.AvgEnergyAllSensor[round_number] = SensorEnergy / self.alive  # #ok
+            self.avg_energy_All_sensor[round_number] = sum_energy_all_nodes_in_curr_round / self.alive
         else:
-            self.AvgEnergyAllSensor[round_number] = 0
-        self.ConsumEnergy[round_number] = (self.initEnergy - self.SumEnergyAllSensor[round_number]) / self.n  # #ok
+            self.avg_energy_All_sensor[round_number] = 0
+        self.consumed_energy[round_number] = (self.initEnergy - self.sum_energy_all_nodes[round_number]) / self.n
 
         En = 0
-        for i in range(self.n):
-            if self.Sensors[i].E > 0:
-                En += pow((self.Sensors[i].E - self.AvgEnergyAllSensor[round_number]), 2)
+        for sensor in self.Sensors:
+            if sensor.E > 0:
+                En += pow(sensor.E - self.avg_energy_All_sensor[round_number], 2)
 
-        self.Enheraf[round_number] = En / self.alive  # #ok
+        if self.alive:
+            self.Enheraf[round_number] = En / self.alive
+        else:
+            self.Enheraf[round_number] = 0
+
         # todo: maybe this is related to graph
         # title(sprintf('Round=##d,Dead nodes=##d', round_number, deadNum))
 
