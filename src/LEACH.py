@@ -330,7 +330,7 @@ class LEACHSimulation:
                 self.lastPeriod = round_number
                 break
 
-    def __initialization_main_loop(self, r):
+    def __initialization_main_loop(self, round_number):
         print('####################################################')
         print('############# Main loop Initialization #############')
         print('####################################################')
@@ -343,10 +343,10 @@ class LEACHSimulation:
         self.rdp = 0  # counter number of receive data packets by sink
 
         # initialization per round
-        self.SRP[r] = self.srp
-        self.RRP[r] = self.rrp
-        self.SDP[r] = self.sdp
-        self.RDP[r] = self.rdp
+        self.SRP[round_number] = self.srp
+        self.RRP[round_number] = self.rrp
+        self.SDP[round_number] = self.sdp
+        self.RDP[round_number] = self.rdp
 
         reset_sensors.start(self.Sensors, self.myModel)
 
@@ -361,7 +361,7 @@ class LEACHSimulation:
 
         # allow to sensor to become cluster-head. LEACH Algorithm
         self.AroundClear = 1 / self.myModel.p  # After every "AroundClear" rounds, let every sensor be CH again
-        if r % self.AroundClear == 0:
+        if round_number % self.AroundClear == 0:
             for sensor in self.Sensors:
                 sensor.G = 0
 
@@ -370,7 +370,7 @@ class LEACHSimulation:
         print("Sensors: ", )
         var_pp(self.Sensors)
 
-    def __cluster_head_selection_phase(self, r):
+    def __cluster_head_selection_phase(self, round_number):
         print('#################################################')
         print('############# cluster head election #############')
         print('#################################################')
@@ -378,7 +378,7 @@ class LEACHSimulation:
 
         # Selection Candidate Cluster Head Based on LEACH Set-up Phase
         # self.list_CH stores the id of all CH in current round
-        self.list_CH = LEACH_select_ch.start(self.Sensors, self.myModel, r, self.circlex, self.circley)
+        self.list_CH = LEACH_select_ch.start(self.Sensors, self.myModel, round_number, self.circlex, self.circley)
 
         # todo: test
         print('self.list_CH: ', end='')
