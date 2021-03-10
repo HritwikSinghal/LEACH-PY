@@ -270,6 +270,10 @@ class LEACHSimulation:
         print()
 
         for round_number in range(1, self.myModel.rmax + 1):
+            print('#####################################')
+            print('############# Round {} #############'.format(round_number))
+            print('#####################################')
+
             # ##########################################
             # ############# Initialization #############
             # ##########################################
@@ -538,15 +542,15 @@ class LEACHSimulation:
         print('# ############# STATISTICS #############')
         print('# ######################################')
 
-        self.total_energy_dissipated = zeros(1, self.myModel.rmax)
-        self.Sum_DEAD = zeros(1, self.myModel.rmax)
-        self.CLUSTERHS = zeros(1, self.myModel.rmax)
-        self.AllSensorEnergy = zeros(1, self.myModel.rmax)
-        self.alive_sensors = zeros(1, self.myModel.rmax)
-        self.sum_energy_all_nodes = zeros(1, self.myModel.rmax)
-        self.avg_energy_All_sensor = zeros(1, self.myModel.rmax)
-        self.consumed_energy = zeros(1, self.myModel.rmax)
-        self.Enheraf = zeros(1, self.myModel.rmax)
+        self.total_energy_dissipated = zeros(1, self.myModel.rmax + 1)
+        self.Sum_DEAD = zeros(1, self.myModel.rmax + 1)
+        self.CLUSTERHS = zeros(1, self.myModel.rmax + 1)
+        self.AllSensorEnergy = zeros(1, self.myModel.rmax + 1)
+        self.alive_sensors = zeros(1, self.myModel.rmax + 1)
+        self.sum_energy_all_nodes = zeros(1, self.myModel.rmax + 1)
+        self.avg_energy_All_sensor = zeros(1, self.myModel.rmax + 1)
+        self.consumed_energy = zeros(1, self.myModel.rmax + 1)
+        self.Enheraf = zeros(1, self.myModel.rmax + 1)
 
         self.Sum_DEAD[round_number] = self.deadNum
         self.SRP[round_number] = self.srp
