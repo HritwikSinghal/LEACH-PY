@@ -4,7 +4,7 @@ from Base_modules.LEACH_configure_sensors import *
 from Base_modules.LEACH_set_parameters import *
 
 
-################################################################
+# #################################################
 # todo :test, for debugging
 
 def var_pp(stuff):
@@ -18,7 +18,7 @@ def pp(stuff):
     pp.pprint(stuff)
 
 
-################################################################
+# #################################################
 
 
 def start(Sensors: list[Sensor], myModel: Model, senders: list, PacketType: str, receivers: list, srp, rrp, sdp, rdp):

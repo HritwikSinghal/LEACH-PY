@@ -13,7 +13,7 @@ def zeros(row, column):
     return re_list
 
 
-def get_min_and_idCH(myModel: Model, TotalCH, distance: list):
+def get_min_and_id_of_ch(myModel: Model, TotalCH, distance: list):
     min_dist_from_all_ch = []
     id_of_min_dist_ch = []
 
@@ -50,6 +50,7 @@ def start(Sensors: list[Sensor], myModel: Model, TotalCH):
                     pow(Sensors[i].xd - Sensors[TotalCH[j]].xd, 2) + pow(Sensors[i].yd - Sensors[TotalCH[j]].yd, 2)
                 )
 
+        # todo: test
         print("printing Disnace array:")
         for x in distance:
             print(x)
@@ -58,7 +59,7 @@ def start(Sensors: list[Sensor], myModel: Model, TotalCH):
         # what below does is:
         # We have stored all CH as row and took distance between each CH and all nodes in its Columns
         # this take minimum value of each column i.e min dist for each node and that dist is dist to CH
-        min_dist_from_all_ch, id_of_min_dist_ch = get_min_and_idCH(myModel, TotalCH, distance)
+        min_dist_from_all_ch, id_of_min_dist_ch = get_min_and_id_of_ch(myModel, TotalCH, distance)
         # [min_dist_from_all_ch, id_of_min_dist_ch] = min(distance)
 
         # todo: test
