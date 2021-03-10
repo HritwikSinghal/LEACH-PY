@@ -1,11 +1,12 @@
 from src.LEACH_configure_sensors import *
 
 
-def start(Sensors: list[Sensor], Receiver):
+def start(Sensors: list[Sensor], receiver):
     sender = []
 
     for sensor in Sensors:
-        if sensor.MCH == Receiver and sensor.id != Receiver:
+        if sensor.MCH == receiver and sensor.id != receiver:
             sender.append(sensor.id)
+            print(f'sender node: {sensor} will send to {receiver} ')
 
     return sender
