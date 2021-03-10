@@ -49,7 +49,7 @@ class Model:
         self.HpacketLen = 100
 
         # Number of Packets sent in steady-state phase
-        self.NumPacket = 10
+        self.NumPacket = 1
 
         # Radio Range
         self.RR = 0.5 * x * sqrt(2)

@@ -6,6 +6,11 @@
 
 from src import LEACH
 
-if __name__ == '__main__':
+
+def main():
     myLeach = LEACH.LEACHSimulation(n=5)
     myLeach.start()
+
+
+if __name__ == '__main__':
+    main()

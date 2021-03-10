@@ -4,23 +4,6 @@ from src.LEACH_configure_sensors import *
 from src.LEACH_set_parameters import *
 
 
-# #################################################
-# todo :test, for debugging
-
-def var_pp(stuff):
-    pp = pprint.PrettyPrinter(indent=1)
-    for x in stuff:
-        pp.pprint(vars(x))
-
-
-def pp(stuff):
-    pp = pprint.PrettyPrinter(indent=4)
-    pp.pprint(stuff)
-
-
-# #################################################
-
-
 def start(Sensors: list[Sensor], myModel: Model, senders: list, PacketType: str, receivers: list, srp, rrp, sdp, rdp):
     sap = 0  # Send a packet or Number of sent packets
     rap = 0  # Receive a packet or Number of received packets

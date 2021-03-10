@@ -35,6 +35,10 @@ def get_min_and_id_of_ch(myModel: Model, TotalCH, distance: list):
 
 
 def start(Sensors: list[Sensor], myModel: Model, TotalCH):
+    print('# ######################################################')
+    print('# ############# Sensors join to nearest CH #############')
+    print('# ######################################################')
+
     total_nodes = myModel.n
     number_of_ch = len(TotalCH)
 

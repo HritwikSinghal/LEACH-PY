@@ -1,4 +1,3 @@
-from math import *
 from src.LEACH_set_parameters import *
 from src.LEACH_configure_sensors import *
 
