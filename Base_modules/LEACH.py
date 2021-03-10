@@ -48,18 +48,31 @@ class LEACH:
         self.AroundClear = 1 / self.myModel.p  # After every "AroundClear" rounds, let every sensor be CH again
         self.n = n  # Number of Nodes in the field
 
+        # ###########################################
+        # ############# From init_param #############
+        # ###########################################
         self.deadNum = 0  # Number of dead nodes
 
+        # ##########################################
+        # ############# From start_sim #############
+        # ##########################################
         # counter for bit transmitted to Bases Station and Cluster Heads
         self.srp = 0  # counter number of sent routing packets
         self.rrp = 0  # counter number of receive routing packets
         self.sdp = 0  # counter number of sent data packets to sink
         self.rdp = 0  # counter number of receive data packets by sink
 
+        # ##########################################
+        # ############# From start_sim #############
+        # ##########################################
+        self.x = 0
+
+        # #############################################
+        # ############# From steady state #############
+        # #############################################
         # This section Operate for each epoch
         self.member = []  # Member of each cluster in per period      # Not used
         self.countCHs = 0  # Number of CH in per period               # Not Used
-
         self.NumPacket = self.myModel.NumPacket  # Number of Packets sent in steady-state phase
 
     def start(self):
@@ -204,7 +217,14 @@ class LEACH:
         self.sdp = 0  # counter of number of sent data packets
         self.rdp = 0  # counter of number of receive data packets
 
-        # Sink broadcast 'Hello' message to all nodes
+        # #######################################################################
+        # ############# Sink broadcast 'Hello' message to all nodes #############
+        # #######################################################################
+        print("#######################################################################")
+        print("############# Sink broadcast 'Hello' message to all nodes #############")
+        print("#######################################################################")
+        print()
+
         self.sender = [self.n]  # List of senders, for start_sim, sink will send hello packet to all
         self.receivers = [x for x in range(n)]  # List of senders, for start_sim, All nodes will receive from sink
 
@@ -212,7 +232,14 @@ class LEACH:
             self.Sensors, self.myModel, self.sender, 'Hello', self.receivers, self.srp, self.rrp, self.sdp, self.rdp
         )
 
-        # All sensors location information to Sink .
+        # ####################################################################
+        # ############# All sensors location information to Sink #############
+        # ####################################################################
+        print("####################################################################")
+        print("############# All sensors location information to Sink #############")
+        print("####################################################################")
+        print()
+
         dis_to_sink.start(self.Sensors, self.myModel)
 
         # Save metrics
@@ -220,8 +247,6 @@ class LEACH:
         self.RRP[0] = self.rrp
         self.SDP[0] = self.sdp
         self.RDP[0] = self.rdp
-
-        self.x = 0
 
     def __main_loop(self):
         print("#############################################")
@@ -251,8 +276,13 @@ class LEACH:
             self.__cluster_head_selection_phase(round_number)
 
             # ######################################################################
-            # ############# plot network status in end of set-up phase #############
+            # ############# Plot network status in end of set-up phase #############
             # ######################################################################
+            print("######################################################################")
+            print("############# Plot network status in end of set-up phase #############")
+            print("######################################################################")
+            print()
+
             # this will draw lines from every node to its CH
 
             #      for i=1:n
