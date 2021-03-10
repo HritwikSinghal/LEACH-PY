@@ -133,10 +133,6 @@ class LEACHSimulation:
         print(vars(self.myArea))
         print("self.myModel")
         print(vars(self.myModel))
-        print("self.total_energy_dissipated", self.total_energy_dissipated)
-        print("self.Sum_DEAD", self.Sum_DEAD)
-        print("self.CLUSTERHS", self.CLUSTERHS)
-        print("self.AllSensorEnergy", self.AllSensorEnergy)
         print('----------------------------------------------')
 
     def __conf_sen(self):
@@ -297,6 +293,7 @@ class LEACHSimulation:
             print("######################################################################")
             print()
 
+            # Todo: plot here
             # this will draw lines from every node to its CH
 
             #      for i=1:n
@@ -323,18 +320,12 @@ class LEACHSimulation:
             # ##############################################
             self.__steady_state_phase()
 
-            # todo: test
-            print()
-
-            # # Todo: done till here
-            # exit()
-
             # ######################################
             # ############# STATISTICS #############
             # ######################################
             self.statistics(round_number)
 
-            # dead
+            # if all nodes are dead, exit
             if self.n == self.deadNum:
                 self.lastPeriod = round_number
                 break
@@ -579,3 +570,10 @@ class LEACHSimulation:
         self.Enheraf[round_number] = En / self.alive  # #ok
         # todo: maybe this is related to graph
         # title(sprintf('Round=##d,Dead nodes=##d', round_number, deadNum))
+
+        # todo: test
+        print("self.total_energy_dissipated", self.total_energy_dissipated)
+        print("self.Sum_DEAD", self.Sum_DEAD)
+        print("self.CLUSTERHS", self.CLUSTERHS)
+        print("self.AllSensorEnergy", self.AllSensorEnergy)
+        print('----------------------------------------------')
