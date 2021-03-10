@@ -42,7 +42,7 @@ def zeros(row, column):
     return re_list
 
 
-class LEACH:
+class LEACHSimulation:
 
     def __init__(self, n=200):
         self.AroundClear = 1 / self.myModel.p  # After every "AroundClear" rounds, let every sensor be CH again

@@ -7,5 +7,5 @@
 from src import LEACH
 
 if __name__ == '__main__':
-    myLeach = LEACH.LEACH(n=5)
+    myLeach = LEACH.LEACHSimulation(n=5)
     myLeach.start()
