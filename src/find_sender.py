@@ -7,6 +7,6 @@ def start(Sensors: list[Sensor], receiver):
     for sensor in Sensors:
         if sensor.MCH == receiver and sensor.id != receiver:
             sender.append(sensor.id)
-            print(f'sender node: {sensor} will send to {receiver} ')
+            print(f'sender node: {sensor.id} will send to {receiver} ')
 
     return sender

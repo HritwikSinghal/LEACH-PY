@@ -18,14 +18,14 @@ from src import send_receive_packets
 
 
 def var_pp(stuff):
-    pp = pprint.PrettyPrinter(indent=1)
+    prettty_prrint = pprint.PrettyPrinter(indent=1)
     for x in stuff:
-        pp.pprint(vars(x))
+        prettty_prrint.pprint(vars(x))
 
 
 def pp(stuff):
-    pp = pprint.PrettyPrinter(indent=4)
-    pp.pprint(stuff)
+    prettty_prrint = pprint.PrettyPrinter(indent=4)
+    prettty_prrint.pprint(stuff)
 
 
 # #################################################
@@ -188,8 +188,8 @@ class LEACHSimulation:
 
         # todo: test
         print("self.initEnergy", self.initEnergy)
-        print("self.SRP", self.SRP)
         print("len(self.SRP)", len(self.SRP))
+        print("self.SRP", self.SRP)
         print("self.RRP", self.RRP)
         print("self.SDP", self.SDP)
         print("self.RDP", self.RDP)
@@ -376,10 +376,10 @@ class LEACHSimulation:
                 print(f'setting G=0 for {sensor.id}')
                 sensor.G = 0
 
-        # todo: test
-        print("\n\nAfter: allow sensor to become CH")
-        print("Sensors: ", )
-        var_pp(self.Sensors)
+            # todo: test
+            print("\n\nAfter: allow sensor to become CH")
+            print("Sensors: ", )
+            var_pp(self.Sensors)
 
     def __cluster_head_selection_phase(self, round_number):
         print('#################################################')
@@ -392,10 +392,10 @@ class LEACHSimulation:
         self.list_CH = LEACH_select_ch.start(self.Sensors, self.myModel, round_number, self.circlex, self.circley)
 
         # todo: test
-        print('self.list_CH: ', end='')
+        print('Cluster Heads: ', end='')
         pp(self.list_CH)
-        # if round_number == 0 and len(self.list_CH) == 0:
-        #     exit("EXIT")
+        if round_number == 1 and len(self.list_CH) == 0:
+            exit("EXIT, no CH in initial round")
         print()
 
         # #####################################################################################
@@ -410,6 +410,7 @@ class LEACHSimulation:
         join_to_nearest_ch.start(self.Sensors, self.myModel, self.list_CH)
 
         # todo: test
+        print("CH: ", self.list_CH)
         print("\nSensors:")
         var_pp(self.Sensors)
         print()
@@ -436,11 +437,13 @@ class LEACHSimulation:
         # Broadcasting CH x to All Sensors that are in Radio Rage of x.
         # Doing this for all CH
         for ch_id in self.list_CH:
+            # todo: test
+            print(f'for cluster head: {ch_id}')
             senderRR = self.myModel.RR  # Radio range of sender
             self.receivers: list = findReceiver.start(self.Sensors, self.myModel, ch_id, senderRR)
 
             # todo: test
-            print("sender: ", ch_id)
+            print("\nsender (or CH): ", ch_id)
             print('self.Receivers: ', end='')
             print(self.receivers)
 
@@ -488,6 +491,7 @@ class LEACHSimulation:
                 # todo: test
                 print("sender: ", sender)
                 print("receiver: ", receiver)
+                print()
 
                 self.srp, self.rrp, self.sdp, self.rdp = send_receive_packets.start(
                     self.Sensors, self.myModel, sender, 'Data', [receiver], self.srp, self.rrp, self.sdp, self.rdp
@@ -510,6 +514,9 @@ class LEACHSimulation:
         print('###################################################################################')
         print()
 
+        # todo: test
+        print('senders (or CH) = ', self.list_CH)
+
         for sender in self.list_CH:
             self.receivers = [self.n]  # Sink
 
@@ -530,13 +537,19 @@ class LEACHSimulation:
             var_pp(self.Sensors)
             print()
 
-        # ###########################################################################################################
-        # ############# send Data packet directly from other nodes(that aren't in each cluster) to Sink #############
-        # ###########################################################################################################
+        # #####################################################################################################
+        # ############# send Data packet directly from nodes(that aren't in each cluster) to Sink #############
+        # #####################################################################################################
+
+        print("#####################################################################################################")
+        print("############# send Data packet directly from nodes(that aren't in each cluster) to Sink #############")
+        print("#####################################################################################################")
+
         for sensor in self.Sensors:
-            if sensor.MCH == self.n:  # if it is sink
+            if sensor.MCH == self.n and sensor.id != self.n:  # if the node has sink as its CH but it's not sink itself
                 self.receivers = [self.n]  # Sink
                 sender = [sensor.id]  # Other Nodes
+                print(f"node {sender} will send directly to sink ")
                 self.srp, self.rrp, self.sdp, self.rdp = send_receive_packets.start(
                     self.Sensors, self.myModel, sender, 'Data', self.receivers, self.srp, self.rrp, self.sdp, self.rdp
                 )
@@ -546,10 +559,10 @@ class LEACHSimulation:
         print('# ############# STATISTICS #############')
         print('# ######################################')
 
-        self.total_energy_dissipated = zeros(1, self.myModel.rmax + 1)
+        # self.total_energy_dissipated = zeros(1, self.myModel.rmax + 1)
+        # self.AllSensorEnergy = zeros(1, self.myModel.rmax + 1)
         self.Sum_DEAD = zeros(1, self.myModel.rmax + 1)
         self.CLUSTERHS = zeros(1, self.myModel.rmax + 1)
-        self.AllSensorEnergy = zeros(1, self.myModel.rmax + 1)
         self.alive_sensors = zeros(1, self.myModel.rmax + 1)
         self.sum_energy_all_nodes = zeros(1, self.myModel.rmax + 1)
         self.avg_energy_All_sensor = zeros(1, self.myModel.rmax + 1)
@@ -592,16 +605,16 @@ class LEACHSimulation:
         # title(sprintf('Round=##d,Dead nodes=##d', round_number, deadNum))
 
         # todo: test
-        print("self.SRP", self.SRP)
         print("len(self.SRP)", len(self.SRP))
+        print("self.SRP", self.SRP)
         print("self.RRP", self.RRP)
         print("self.SDP", self.SDP)
         print("self.RDP", self.RDP)
         print('----------------------------------------------')
-        print('self.total_energy_dissipated', self.total_energy_dissipated)
+        # print('self.total_energy_dissipated', self.total_energy_dissipated)
+        # print('self.AllSensorEnergy', self.AllSensorEnergy)
         print('self.Sum_DEAD', self.Sum_DEAD)
         print('self.CLUSTERHS', self.CLUSTERHS)
-        print('self.AllSensorEnergy', self.AllSensorEnergy)
         print('self.alive_sensors', self.alive_sensors)
         print('self.sum_energy_all_nodes', self.sum_energy_all_nodes)
         print('self.avg_energy_All_sensor', self.avg_energy_All_sensor)

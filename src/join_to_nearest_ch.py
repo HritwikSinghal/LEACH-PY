@@ -55,7 +55,7 @@ def start(Sensors: list[Sensor], myModel: Model, TotalCH):
                 )
 
         # todo: test
-        print("printing Disnace array:")
+        print("printing Distance array:")
         for x in distance:
             print(x)
         print()
@@ -81,4 +81,4 @@ def start(Sensors: list[Sensor], myModel: Model, TotalCH):
                     sensor.dis2ch = min_dist_from_all_ch[i]
                 else:
                     sensor.MCH = total_nodes
-                    sensor.dis2ch = Sensors[i].dis2sink
+                    sensor.dis2ch = sensor.dis2sink

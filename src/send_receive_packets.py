@@ -37,7 +37,7 @@ def start(Sensors: list[Sensor], myModel: Model, senders: list, PacketType: str,
         for receiver in receivers:
             # Energy dissipated from receivers for Receiving a packet
             Sensors[receiver].E -= (myModel.ERX + myModel.EDA) * PacketSize
-            print(f'\nnew energy of {receiver} = {Sensors[receiver].E}')
+            print(f'new energy of {receiver} = {Sensors[receiver].E}')
 
             # Received a Packet
             if Sensors[sender].E > 0 and Sensors[receiver].E > 0:
@@ -47,10 +47,13 @@ def start(Sensors: list[Sensor], myModel: Model, senders: list, PacketType: str,
     if PacketType == 'Hello':
         srp += sap
         rrp += rap
+        print("incremented srp and rrp by 1")
     else:
         sdp += sap
         rdp += rap
+        print("incremented sdp and rdp by 1")
 
+    print()
     return srp, rrp, sdp, rdp
 
 
