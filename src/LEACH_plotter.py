@@ -75,5 +75,5 @@ def start(Sensors: [Sensor], myModel: Model, deadnum=0):
     axis square
     '''
 
-    # todo: fix this in in Ileach
+    # todo: return correct deadnum
     return deadNum, [], []

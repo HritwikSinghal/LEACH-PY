@@ -61,7 +61,7 @@ class LEACHSimulation:
         self.rrp = 0  # counter number of receive routing packets
         self.sdp = 0  # counter number of sent data packets to sink
         self.rdp = 0  # counter number of receive data packets by sink
-        self.x = 0
+        # self.x = 0    # Not used
 
         # ########################################################
         # ############# For initialization_main_loop #############
@@ -73,7 +73,7 @@ class LEACHSimulation:
         # ##################################################
         # This section Operate for each epoch
         self.member = []  # Member of each cluster in per period      # Not used
-        self.countCHs = 0  # Number of CH in per period               # Not Used
+        self.countCHs = 0  # Number of CH in per period
 
         # ##########################################
         # ############# For statistics #############
@@ -401,6 +401,7 @@ class LEACHSimulation:
         # Selection Candidate Cluster Head Based on LEACH Set-up Phase
         # self.list_CH stores the id of all CH in current round
         self.list_CH = LEACH_select_ch.start(self.Sensors, self.myModel, round_number, self.circlex, self.circley)
+        self.countCHs = len(self.list_CH)
 
         # todo: test
         print('Cluster Heads: ', end='')
@@ -621,4 +622,7 @@ class LEACHSimulation:
         print('self.avg_energy_All_sensor', self.avg_energy_All_sensor)
         print('self.consumed_energy', self.consumed_energy)
         print('self.Enheraf', self.Enheraf)
+
+        print("Sensors: ", )
+        var_pp(self.Sensors)
         print('----------------------------------------------')
