@@ -140,6 +140,16 @@ class LEACHSimulation:
         print(vars(self.myModel))
         print('----------------------------------------------')
 
+        # self.total_energy_dissipated = zeros(1, self.myModel.rmax + 1)
+        # self.AllSensorEnergy = zeros(1, self.myModel.rmax + 1)
+        self.Sum_DEAD = zeros(1, self.myModel.rmax + 1)
+        self.CLUSTERHS = zeros(1, self.myModel.rmax + 1)
+        self.alive_sensors = zeros(1, self.myModel.rmax + 1)
+        self.sum_energy_all_nodes = zeros(1, self.myModel.rmax + 1)
+        self.avg_energy_All_sensor = zeros(1, self.myModel.rmax + 1)
+        self.consumed_energy = zeros(1, self.myModel.rmax + 1)
+        self.Enheraf = zeros(1, self.myModel.rmax + 1)
+
     def __conf_sen(self):
         print("#############################################")
         print("############# configure Sensors #############")
@@ -338,6 +348,7 @@ class LEACHSimulation:
             # if all nodes are dead, exit
             if self.n == self.deadNum:
                 self.lastPeriod = round_number
+                print(f"all dead (dead={self.deadNum}) in round {round_number}")
                 break
 
     def __initialization_main_loop(self, round_number):
@@ -394,8 +405,8 @@ class LEACHSimulation:
         # todo: test
         print('Cluster Heads: ', end='')
         pp(self.list_CH)
-        if round_number == 1 and len(self.list_CH) == 0:
-            exit("EXIT, no CH in initial round")
+        # if round_number == 1 and len(self.list_CH) == 0:
+        #     exit("EXIT, no CH in initial round")
         print()
 
         # #####################################################################################
@@ -558,16 +569,6 @@ class LEACHSimulation:
         print('# ######################################')
         print('# ############# STATISTICS #############')
         print('# ######################################')
-
-        # self.total_energy_dissipated = zeros(1, self.myModel.rmax + 1)
-        # self.AllSensorEnergy = zeros(1, self.myModel.rmax + 1)
-        self.Sum_DEAD = zeros(1, self.myModel.rmax + 1)
-        self.CLUSTERHS = zeros(1, self.myModel.rmax + 1)
-        self.alive_sensors = zeros(1, self.myModel.rmax + 1)
-        self.sum_energy_all_nodes = zeros(1, self.myModel.rmax + 1)
-        self.avg_energy_All_sensor = zeros(1, self.myModel.rmax + 1)
-        self.consumed_energy = zeros(1, self.myModel.rmax + 1)
-        self.Enheraf = zeros(1, self.myModel.rmax + 1)
 
         self.Sum_DEAD[round_number] = self.deadNum
         self.CLUSTERHS[round_number] = self.countCHs
