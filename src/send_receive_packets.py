@@ -4,10 +4,10 @@ from src.LEACH_configure_sensors import *
 from src.LEACH_set_parameters import *
 
 
-def start(Sensors: list[Sensor], myModel: Model, senders: list, PacketType: str, receivers: list, srp, rrp, sdp, rdp):
+def start(Sensors: list[Sensor], myModel: Model, senders: list, receivers: list, srp, rrp, sdp, rdp, packet_type: str):
     sap = 0  # Send a packet or Number of sent packets
     rap = 0  # Receive a packet or Number of received packets
-    if PacketType == 'Hello':
+    if packet_type == 'Hello':
         PacketSize = myModel.HpacketLen
     else:
         PacketSize = myModel.DpacketLen
@@ -44,53 +44,14 @@ def start(Sensors: list[Sensor], myModel: Model, senders: list, PacketType: str,
                 print(f'{receiver} recieved a packet from {sender}')
                 rap += 1
 
-    if PacketType == 'Hello':
+    if packet_type == 'Hello':
         srp += sap
         rrp += rap
         print("incremented srp and rrp by 1")
-    else:
+    elif packet_type == 'Data':
         sdp += sap
         rdp += rap
         print("incremented sdp and rdp by 1")
 
     print()
     return srp, rrp, sdp, rdp
-
-
-# todo: implement this or see if this is implemented in joinToNearestCH
-'''
-
-%     else %To Cluster Head
-%         
-%         for i=1:length( Sender)
-%        
-%            distance=sqrt((Sensors(Sender(i)).xd-Sensors(Sender(i).MCH).xd)^2 + ...
-%                (Sensors(Sender(i)).yd-Sensors(Sender(i).MCH).yd)^2 );   
-%        
-%            send a packet
-%            sap=sap+1;
-%            
-%            Energy dissipated from Normal sensor
-%            if (distance>Model.do)
-%            
-%                 Sensors(Sender(i)).E=Sensors(Sender(i)).E- ...
-%                     (Model.ETX*PacketSize + Model.Emp*PacketSize*(distance^4));
-% 
-%                 if(Sensors(Sender(i)).E>0)
-%                     rap=rap+1;                 
-%                 end
-%             
-%            else
-%                 Sensors(Sender(i)).E=Sensors(Sender(i)).E- ...
-%                     (Model.ETX*PacketSize + Model.Emp*PacketSize*(distance^2));
-% 
-%                 if(Sensors(Sender(i)).E>0)
-%                     rap=rap+1;                 
-%                 end
-%             
-%            end 
-%        end
-  
-
-
-'''

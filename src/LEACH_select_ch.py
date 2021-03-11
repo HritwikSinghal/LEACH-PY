@@ -15,7 +15,7 @@ def zeros(row, column):
     return re_list
 
 
-def start(Sensors: list[Sensor], myModel: Model, round_number: int, circlex, circley):
+def start(Sensors: list[Sensor], myModel: Model, round_number: int):
     CH = []
     # countCHs = 0 # no use
     n = myModel.n
@@ -55,16 +55,14 @@ def start(Sensors: list[Sensor], myModel: Model, round_number: int, circlex, cir
         #     continue
 
         # If current sensor has energy left and has not been CH before
-        if senser.E > 0 and senser.G <= 0:
+        if senser.E and senser.G <= 0:
             # Election of Cluster Heads
             temp_rand = random.uniform(0, 1)
             value = myModel.p / (1 - myModel.p * (round_number % round(1 / myModel.p)))
             print(f'for {senser.id}, temprand = {temp_rand}, value = {value}')
             if temp_rand <= value:
-                # countCHs += 1
                 print(f"Adding {senser.id} to CH")
                 CH.append(senser.id)
-                # CH[countCHs].id = i  # ok
                 senser.type = 'C'
                 senser.G = round(1 / myModel.p) - 1
 

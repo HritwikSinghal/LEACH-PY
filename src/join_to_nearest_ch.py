@@ -64,7 +64,6 @@ def start(Sensors: list[Sensor], myModel: Model, TotalCH):
         # We have stored all CH as row and took distance between each CH and all nodes in its Columns
         # this take minimum value of each column i.e min dist for each node and that dist is dist to CH
         min_dist_from_all_ch, id_of_min_dist_ch = get_min_and_id_of_ch(myModel, TotalCH, distance)
-        # [min_dist_from_all_ch, id_of_min_dist_ch] = min(distance)
 
         # todo: test
         print("min_dist_from_all_ch")
