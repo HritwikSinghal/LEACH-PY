@@ -22,7 +22,13 @@ def start(Sensors: list[Sensor], my_model: Model, dead_num: list[Sensor], round_
             sensor.G = 0
 
         sensor.MCH = my_model.n  # MCH = member of CH, initially all will have sink as their CH
-        sensor.type = 'N'
+        if sensor.type != 'S':
+            sensor.type = 'N'
         sensor.dis2ch = inf
 
-    return dead_num
+    srp = 0  # counter number of sent routing packets
+    rrp = 0  # counter number of receive routing packets
+    sdp = 0  # counter number of sent data packets to sink
+    rdp = 0  # counter number of receive data packets by sink
+
+    return dead_num, srp, rrp, sdp, rdp

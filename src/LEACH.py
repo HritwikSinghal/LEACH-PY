@@ -228,30 +228,26 @@ class LEACHSimulation:
             print('####################################################')
             print()
 
-            # counter for bit transmitted to Bases Station and Cluster Heads
-            self.srp = 0  # counter number of sent routing packets
-            self.rrp = 0  # counter number of receive routing packets
-            self.sdp = 0  # counter number of sent data packets to sink
-            self.rdp = 0  # counter number of receive data packets by sink
+            self.dead_num, self.srp, self.rrp, self.sdp, self.rdp = reset_sensors.start(
+                self.Sensors, self.my_model, self.dead_num, round_number
+            )
 
-            self.dead_num = reset_sensors.start(self.Sensors, self.my_model, self.dead_num, round_number)
+            if len(self.dead_num) > 0 and self.flag_first_dead == 0:
+                # Save the period in which the first node died
+                print(f'first dead in round: {round_number - 1}')
+                self.first_dead_in = round_number - 1
+                self.flag_first_dead = 1
 
+            # Todo: Improve this
             # if all nodes are dead or only sink is left, exit
             if len(self.dead_num) >= self.n:
-                self.lastPeriod = round_number
+                self.lastPeriod = round_number - 1
                 print(f"all dead (dead={len(self.dead_num)}) in round {round_number - 1}")
                 break
 
             # todo: test
-            print("\n\nAfter Reset")
             print("Sensors: ", )
             var_pp(self.Sensors)
-
-            # Save the period in which the first node died
-            if len(self.dead_num) > 0 and self.flag_first_dead == 0:
-                print(f'first dead in round: {round_number}')
-                self.first_dead_in = round_number
-                self.flag_first_dead = 1
 
             # ########################################
             # ############# plot Sensors #############
@@ -265,15 +261,7 @@ class LEACHSimulation:
             # ######################################################################
             # ############# Plot network status in end of set-up phase #############
             # ######################################################################
-
-            '''
-            What has been done till now:
-            All Ch are elected 
-            All nodes know which CH they should send to
-            
-            Whats Todo:
-            Start steady state phase
-            '''
+            # Todo: Plot
 
             # ##############################################
             # ############# steady-state phase #############
@@ -284,8 +272,10 @@ class LEACHSimulation:
             # ############# STATISTICS #############
             # ######################################
             self.statistics(round_number)
+
+            # Todo: Test
             print(f'\nn={self.n}')
-            print("Deadnum=")
+            print("Dead_num=", end='')
             for _ in self.dead_num:
                 print(_.id, end=' ')
             print()
@@ -459,7 +449,7 @@ class LEACHSimulation:
 
         for sender in self.Sensors:
             # if the node has sink as its CH but it's not sink itself and the node is not dead
-            if sender.MCH == self.n and sender.id != self.n and sender.df == 0:
+            if sender.MCH == self.n and sender.id != self.n and sender.E > 0:
                 self.receivers = [self.n]  # Sink
                 sender = [sender.id]  # Other Nodes
 

@@ -13,13 +13,13 @@ def send_rec(Sensors: list[Sensor], myModel: Model, sender, receiver, PacketSize
         Sensors[sender].df = 1
 
     # for receivers
-    # Energy dissipated from receivers for Receiving a packet
+    # Energy dissipated from receivers for Receiving a packet, if the sender died during transmission,
+    # the energy of receiver will be wasted but it will not receive any packet
     Sensors[receiver].E -= (myModel.ERX + myModel.EDA) * PacketSize
-    if Sensors[receiver].E > 0:
+    if Sensors[receiver].E > 0 and Sensors[sender].E > 0:
         # Received a Packet
         rap += 1
-        print(f'{receiver} recieved a packet from {sender}')
-        print(f'new energy of {receiver} = {Sensors[receiver].E}')
+        print(f'{receiver} recieved a packet from {sender}, new energy of {receiver} = {Sensors[receiver].E}')
     else:
         Sensors[receiver].df = 1
         Sensors[receiver].E = 0
