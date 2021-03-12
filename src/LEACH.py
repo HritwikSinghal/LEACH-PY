@@ -281,7 +281,7 @@ class LEACHSimulation:
             # ######################################
             # ############# STATISTICS #############
             # ######################################
-            self.statistics(round_number)
+            self.__statistics(round_number)
 
             # if all nodes are dead or only sink is left, exit
             if len(self.dead_num) >= self.n:
@@ -469,7 +469,7 @@ class LEACHSimulation:
             var_pp(self.Sensors)
             print()
 
-    def statistics(self, round_number):
+    def __statistics(self, round_number):
         print('######################################')
         print('############# STATISTICS #############')
         print('######################################')

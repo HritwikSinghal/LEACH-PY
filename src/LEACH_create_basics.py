@@ -20,7 +20,7 @@ class Model:
 
         # %%%%%%%%%%% Energy Model (all values in Joules and each value is for 1byte of data) %%%%%%%%%%%
         # Initial Energy
-        self.Eo: float = 0.2
+        self.Eo: float = 2
 
         # ETX = Energy dissipated in Transmission, ERX = in Receive
         self.Eelec: float = 50 * 0.000000001
@@ -39,7 +39,7 @@ class Model:
 
         # %%%%%%%%%%%%%%%%%%%%%%%%% Run Time Parameters %%%%%%%%%%%%%%%%%%%%%%%%%
         # maximum number of rounds
-        self.rmax = 50
+        self.rmax = 200
 
         # Data packet size
         self.DpacketLen = 4000
@@ -49,7 +49,7 @@ class Model:
 
         # todo : change this to 10
         # Number of Packets sent in steady-state phase
-        self.NumPacket = 1
+        self.NumPacket = 10
 
         # Radio Range
         self.RR: float = 0.5 * self.x * sqrt(2)
@@ -92,7 +92,6 @@ def create_sensors(my_model: Model):
     Sensors[n].E = my_model.sinkE
     Sensors[n].id = my_model.n
     Sensors[n].type = 'S'
-
 
     for i, sensor in enumerate(Sensors[:-1]):
         # set x location
