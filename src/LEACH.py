@@ -291,7 +291,7 @@ class LEACHSimulation:
             self.deadNum = LEACH_plotter.start(self.Sensors, self.my_model, self.deadNum)
 
             # Save the period in which the first node died
-            if self.deadNum and not self.flag_first_dead:
+            if self.deadNum > 0 and not self.flag_first_dead == 0:
                 print(f'first dead in round: {round_number}')
                 self.first_dead = round_number
                 self.flag_first_dead = 1
@@ -359,20 +359,10 @@ class LEACHSimulation:
         self.sdp = 0  # counter number of sent data packets to sink
         self.rdp = 0  # counter number of receive data packets by sink
 
-        # initialization per round
-        self.SRP[round_number] = self.srp
-        self.RRP[round_number] = self.rrp
-        self.SDP[round_number] = self.sdp
-        self.RDP[round_number] = self.rdp
-
         reset_sensors.start(self.Sensors, self.my_model)
 
         # todo: test
         print("\n\nAfter Reset")
-        print('self.SRP', self.SRP)
-        print('self.RRP', self.RRP)
-        print('self.SDP', self.SDP)
-        print('self.RDP', self.RDP)
         print("Sensors: ", )
         var_pp(self.Sensors)
 
@@ -406,9 +396,9 @@ class LEACHSimulation:
         #     exit("EXIT, no CH in initial round")
         print()
 
-        # #####################################################################################
-        # ############# Broadcasting CHs to All Sensors that are in Radio Rage CH #############
-        # #####################################################################################
+        # #########################################################################################
+        # ############# Broadcasting CHs to All Sensors that are in Radio Range of CH #############
+        # #########################################################################################
         self.__broadcast_cluster_head()
 
         # ######################################################
@@ -437,9 +427,9 @@ class LEACHSimulation:
         print('##############################################################')
 
     def __broadcast_cluster_head(self):
-        print('#####################################################################################')
-        print('############# Broadcasting CHs to All Sensors that are in Radio Rage CH #############')
-        print('#####################################################################################')
+        print('#########################################################################################')
+        print('############# Broadcasting CHs to All Sensors that are in Radio Range of CH #############')
+        print('#########################################################################################')
         print()
 
         # Broadcasting CH x to All Sensors that are in Radio Rage of x.
@@ -555,10 +545,12 @@ class LEACHSimulation:
         print("############# send Data packet directly from nodes(that aren't in each cluster) to Sink #############")
         print("#####################################################################################################")
 
-        for sensor in self.Sensors:
-            if sensor.MCH == self.n and sensor.id != self.n:  # if the node has sink as its CH but it's not sink itself
+        for sender in self.Sensors:
+            # if the node has sink as its CH but it's not sink itself and the node is not dead
+            if sender.MCH == self.n and sender.id != self.n and sender.df == 0:
                 self.receivers = [self.n]  # Sink
-                sender = [sensor.id]  # Other Nodes
+                sender = [sender.id]  # Other Nodes
+
                 print(f"node {sender} will send directly to sink ")
                 self.srp, self.rrp, self.sdp, self.rdp = send_receive_packets.start(
                     self.Sensors, self.my_model, sender, self.receivers, self.srp, self.rrp, self.sdp, self.rdp,
@@ -606,6 +598,7 @@ class LEACHSimulation:
         # title(sprintf('Round=##d,Dead nodes=##d', round_number, deadNum))
 
         # todo: test
+        print("round number:", round_number)
         print("len(self.SRP)", len(self.SRP))
         print("self.SRP", self.SRP)
         print("self.RRP", self.RRP)

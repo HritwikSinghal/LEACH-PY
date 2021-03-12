@@ -41,7 +41,7 @@ class Model:
         # %%%%%%%%%%%%%%%%%%%%%%%%% Run Time Parameters %%%%%%%%%%%%%%%%%%%%%%%%%
         # todo : change this to 200
         # maximum number of rounds
-        self.rmax = 10
+        self.rmax = 100
 
         # Data packet size
         self.DpacketLen = 4000
