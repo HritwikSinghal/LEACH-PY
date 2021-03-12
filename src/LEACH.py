@@ -1,6 +1,6 @@
 import pprint
 
-from src import LEACH_configure_sensors
+from src import LEACH_create_sensors
 from src import LEACH_plotter
 from src import LEACH_select_ch
 from src import LEACH_set_parameters
@@ -92,10 +92,10 @@ class LEACHSimulation:
         # #################################################################
         self.__set_init_param_for_simulation()
 
-        # #############################################
-        # ############# configure Sensors #############
-        # #############################################
-        self.__conf_sen()
+        # ##########################################
+        # ############# Create Sensors #############
+        # ##########################################
+        self.__create_sen()
 
         # ########################################
         # ############# plot Sensors #############
@@ -138,7 +138,7 @@ class LEACHSimulation:
         self.sum_dead_nodes = zeros(1, self.my_model.rmax + 1)
         self.ch_per_round = zeros(1, self.my_model.rmax + 1)
         self.alive_sensors = zeros(1, self.my_model.rmax + 1)
-        self.sum_energy_all_nodes = zeros(1, self.my_model.rmax + 1)
+        self.sum_energy_left_all_nodes = zeros(1, self.my_model.rmax + 1)
         self.avg_energy_All_sensor = zeros(1, self.my_model.rmax + 1)
         self.consumed_energy = zeros(1, self.my_model.rmax + 1)
         self.Enheraf = zeros(1, self.my_model.rmax + 1)
@@ -156,17 +156,17 @@ class LEACHSimulation:
         self.rdp = 0  # counter of number of receive data packets
 
         # todo: test
-        print("length of below 4", len(self.SRP))
+        print("length of below 4=", len(self.SRP))
         print("self.SRP", self.SRP)
         print("self.RRP", self.RRP)
         print("self.SDP", self.SDP)
         print("self.RDP", self.RDP)
         print('----------------------------------------------')
 
-    def __conf_sen(self):
-        print("#############################################")
-        print("############# configure Sensors #############")
-        print("#############################################")
+    def __create_sen(self):
+        print("##########################################")
+        print("############# Create Sensors #############")
+        print("##########################################")
         print()
 
         '''
@@ -176,7 +176,7 @@ class LEACHSimulation:
 
         # Create a random scenario & Load sensor Location
         # configure sensors
-        self.Sensors = LEACH_configure_sensors.start(self.my_model)
+        self.Sensors = LEACH_create_sensors.start(self.my_model)
 
         for sensor in self.Sensors:
             self.initEnergy += sensor.E
@@ -234,21 +234,6 @@ class LEACHSimulation:
         print('self.RRP', self.RRP)
         print('self.SDP', self.SDP)
         print('self.RDP', self.RDP)
-
-        # ###############################################################
-        # ############# Find All sensors distance from Sink #############
-        # ###############################################################
-        print("###############################################################")
-        print("############# Find All sensors distance from Sink #############")
-        print("###############################################################")
-        print()
-
-        dis_to_sink.start(self.Sensors, self.my_model)
-
-        # todo: test
-        print("Sensors: ", )
-        var_pp(self.Sensors)
-        print('----------------------------------------------')
 
     def __main_loop(self):
         print("#############################################")
@@ -551,19 +536,19 @@ class LEACHSimulation:
         self.RDP[round_number] = self.rdp
 
         self.alive = 0
-        sum_energy_all_nodes_in_curr_round = 0
+        sum_energy_left_all_nodes_in_curr_round = 0
         for sensor in self.Sensors:
             if sensor.E > 0:
                 self.alive += 1
-                sum_energy_all_nodes_in_curr_round += sensor.E
+                sum_energy_left_all_nodes_in_curr_round += sensor.E
 
         self.alive_sensors[round_number] = self.alive
-        self.sum_energy_all_nodes[round_number] = sum_energy_all_nodes_in_curr_round
+        self.sum_energy_left_all_nodes[round_number] = sum_energy_left_all_nodes_in_curr_round
         if self.alive:
-            self.avg_energy_All_sensor[round_number] = sum_energy_all_nodes_in_curr_round / self.alive
+            self.avg_energy_All_sensor[round_number] = sum_energy_left_all_nodes_in_curr_round / self.alive
         else:
             self.avg_energy_All_sensor[round_number] = 0
-        self.consumed_energy[round_number] = (self.initEnergy - self.sum_energy_all_nodes[round_number]) / self.n
+        self.consumed_energy[round_number] = (self.initEnergy - self.sum_energy_left_all_nodes[round_number]) / self.n
 
         En = 0
         for sensor in self.Sensors:
@@ -591,7 +576,7 @@ class LEACHSimulation:
         print('self.Sum_DEAD', self.sum_dead_nodes)
         print('self.CLUSTERHS', self.ch_per_round)
         print('self.alive_sensors', self.alive_sensors)
-        print('self.sum_energy_all_nodes', self.sum_energy_all_nodes)
+        print('self.sum_energy_all_nodes', self.sum_energy_left_all_nodes)
         print('self.avg_energy_All_sensor', self.avg_energy_All_sensor)
         print('self.consumed_energy', self.consumed_energy)
         print('self.Enheraf', self.Enheraf)

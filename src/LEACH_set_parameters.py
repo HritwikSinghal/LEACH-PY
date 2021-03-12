@@ -37,7 +37,6 @@ class Model:
         self.do: float = sqrt(self.Efs / self.Emp)
 
         # %%%%%%%%%%%%%%%%%%%%%%%%% Run Time Parameters %%%%%%%%%%%%%%%%%%%%%%%%%
-        # todo : change this to 200
         # maximum number of rounds
         self.rmax = 50
 

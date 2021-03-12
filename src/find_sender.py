@@ -1,4 +1,4 @@
-from src.LEACH_configure_sensors import *
+from src.LEACH_create_sensors import *
 
 
 def start(Sensors: list[Sensor], receiver):

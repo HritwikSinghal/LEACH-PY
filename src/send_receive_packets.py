@@ -1,6 +1,6 @@
 import pprint
 
-from src.LEACH_configure_sensors import *
+from src.LEACH_create_sensors import *
 from src.LEACH_set_parameters import *
 
 
@@ -44,7 +44,7 @@ def start(Sensors: list[Sensor], myModel: Model, senders: list, receivers: list,
         if Sensors[sender].E > 0:
             for receiver in receivers:
                 if Sensors[receiver].E > 0:
-
+                    print()
                     distance = sqrt(
                         pow(Sensors[sender].xd - Sensors[receiver].xd, 2) +
                         pow(Sensors[sender].yd - Sensors[receiver].yd, 2)

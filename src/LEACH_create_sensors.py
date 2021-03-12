@@ -4,7 +4,6 @@ from src.LEACH_set_parameters import *
 
 
 class Sensor:
-
     def __init__(self):
         self.xd = 0
         self.yd = 0
@@ -25,7 +24,18 @@ def start(my_model: Model):
     # created extra one slot for sink
     Sensors = [Sensor() for _ in range(n + 1)]
 
-    for i, sensor in enumerate(Sensors):
+    # for sink
+    """ 
+    first n - 1 slots in Sensors are for normal sensors. (0 to n-1) 
+    nth slot is for sink
+    so for n=10, 0-9 are 10 normal sensors and 10th slot is for sink 
+    """
+    Sensors[n].xd = my_model.sinkx
+    Sensors[n].yd = my_model.sinky
+    Sensors[n].E = my_model.sinkE
+    Sensors[n].id = my_model.n
+
+    for i, sensor in enumerate(Sensors[:-1]):
         # set x location
         sensor.xd = random.randint(1, my_model.x)
         # set y location
@@ -42,15 +52,8 @@ def start(my_model: Model):
         sensor.id = i
         # Sensors[i].RR=Model.RR
 
-    # for sink
-    """ 
-    first n - 1 slots in Sensors are for normal sensors. (0 to n-1) 
-    nth slot is for sink
-    so for n=10, 0-9 are 10 normal sensors and 10th slot is for sink 
-    """
-    Sensors[n].xd = my_model.sinkx
-    Sensors[n].yd = my_model.sinky
-    Sensors[n].E = my_model.sinkE
-    Sensors[n].id = my_model.n
+        # Dist to sink
+        sensor.dis2sink = sqrt(pow((sensor.xd - Sensors[-1].xd), 2) + pow((sensor.yd - Sensors[-1].yd), 2))
+        print(f'Dist to sink: {Sensors[-1].id} for {sensor.id} is {sensor.dis2sink}')
 
     return Sensors
