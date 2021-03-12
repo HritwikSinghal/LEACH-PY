@@ -55,7 +55,7 @@ def start(Sensors: list[Sensor], myModel, round_number: int):
 
         # If current sensor has energy left and has not been CH before And it is not dead
         # todo: keep either 'senser.E > 0' or 'senser.df == 0'
-        if senser.E > 0 and senser.G <= 0 and senser.df == 0:
+        if senser.E > 0 and senser.G <= 0:
             # Election of Cluster Heads
             temp_rand = random.uniform(0, 1)
             value = myModel.p / (1 - myModel.p * (round_number % round(1 / myModel.p)))

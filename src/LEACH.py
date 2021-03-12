@@ -76,6 +76,7 @@ class LEACHSimulation:
         # ########################################################
         self.dead_num = []
         self.packets_to_base_station = 0
+        self.first_dead_in = -1
 
         # ##################################################
         # ############# For steady_state_phase #############
@@ -142,6 +143,26 @@ class LEACHSimulation:
         print('-------------------- XXX --------------------')
         print('############# END of simulation #############')
         print('-------------------- XXX --------------------')
+
+    def __check_dead_num(self, round_number):
+        # if sensor is dead
+        for sensor in self.Sensors:
+            if sensor.E <= 0 and sensor not in self.dead_num:
+                sensor.df = 1
+                self.dead_num.append(sensor)
+
+                print(f'{sensor.id} is dead, \ndeadnum=')
+                for _ in self.dead_num:
+                    print(_.id, end=' ')
+                print()
+
+        # flag it as dead
+        if len(self.dead_num) > 0 and self.flag_first_dead == 0:
+            # Save the period in which the first node died
+            self.first_dead_in = round_number
+            self.flag_first_dead = 1
+
+            print(f'first dead in round: {round_number}')
 
     def __create_sen(self):
         print("##########################################")
@@ -228,22 +249,7 @@ class LEACHSimulation:
             print('####################################################')
             print()
 
-            self.dead_num, self.srp, self.rrp, self.sdp, self.rdp = reset_sensors.start(
-                self.Sensors, self.my_model, self.dead_num, round_number
-            )
-
-            if len(self.dead_num) > 0 and self.flag_first_dead == 0:
-                # Save the period in which the first node died
-                print(f'first dead in round: {round_number - 1}')
-                self.first_dead_in = round_number - 1
-                self.flag_first_dead = 1
-
-            # Todo: Improve this
-            # if all nodes are dead or only sink is left, exit
-            if len(self.dead_num) >= self.n:
-                self.lastPeriod = round_number - 1
-                print(f"all dead (dead={len(self.dead_num)}) in round {round_number - 1}")
-                break
+            self.srp, self.rrp, self.sdp, self.rdp = reset_sensors.start(self.Sensors, self.my_model, round_number)
 
             # todo: test
             print("Sensors: ", )
@@ -257,6 +263,7 @@ class LEACHSimulation:
             # ############# cluster head election #############
             # #################################################
             self.__cluster_head_selection_phase(round_number)
+            self.no_of_ch = len(self.list_CH)  # Number of CH in per period
 
             # ######################################################################
             # ############# Plot network status in end of set-up phase #############
@@ -268,17 +275,19 @@ class LEACHSimulation:
             # ##############################################
             self.__steady_state_phase()
 
+            # if sensor is dead
+            self.__check_dead_num(round_number)
+
             # ######################################
             # ############# STATISTICS #############
             # ######################################
             self.statistics(round_number)
 
-            # Todo: Test
-            print(f'\nn={self.n}')
-            print("Dead_num=", end='')
-            for _ in self.dead_num:
-                print(_.id, end=' ')
-            print()
+            # if all nodes are dead or only sink is left, exit
+            if len(self.dead_num) >= self.n:
+                self.lastPeriod = round_number
+                print(f"all dead (dead={len(self.dead_num)}) in round {round_number}")
+                break
 
     def __cluster_head_selection_phase(self, round_number):
         print('#################################################')
@@ -370,7 +379,6 @@ class LEACHSimulation:
 
         # changed from 1 to self.myModel.NumPacket
         for i in range(self.my_model.NumPacket):  # Number of Packets to be sent in steady-state phase
-            self.no_of_ch = 0  # Number of CH in per period
 
             # ########################################
             # ############# plot Sensors #############
@@ -387,6 +395,8 @@ class LEACHSimulation:
 
             for receiver in self.list_CH:
                 sender = find_sender.start(self.Sensors, receiver)
+                if len(sender) == 0:
+                    continue
 
                 # todo: test
                 print("sender: ", sender)
@@ -406,6 +416,26 @@ class LEACHSimulation:
                 print("Sensors: ", )
                 var_pp(self.Sensors)
                 print()
+
+        # #####################################################################################################
+        # ############# send Data packet directly from nodes(that aren't in each cluster) to Sink #############
+        # #####################################################################################################
+
+        print("#####################################################################################################")
+        print("############# send Data packet directly from nodes(that aren't in each cluster) to Sink #############")
+        print("#####################################################################################################")
+
+        for sender in self.Sensors:
+            # if the node has sink as its CH but it's not sink itself and the node is not dead
+            if sender.MCH == self.n and sender.id != self.n and sender.E > 0:
+                self.receivers = [self.n]  # Sink
+                sender = [sender.id]  # Other Nodes
+
+                print(f"node {sender} will send directly to sink ")
+                self.srp, self.rrp, self.sdp, self.rdp = send_receive_packets.start(
+                    self.Sensors, self.my_model, sender, self.receivers, self.srp, self.rrp, self.sdp, self.rdp,
+                    packet_type='Data'
+                )
 
         # ###################################################################################
         # ############# Send Data packet from CH to Sink after Data aggregation #############
@@ -439,32 +469,12 @@ class LEACHSimulation:
             var_pp(self.Sensors)
             print()
 
-        # #####################################################################################################
-        # ############# send Data packet directly from nodes(that aren't in each cluster) to Sink #############
-        # #####################################################################################################
-
-        print("#####################################################################################################")
-        print("############# send Data packet directly from nodes(that aren't in each cluster) to Sink #############")
-        print("#####################################################################################################")
-
-        for sender in self.Sensors:
-            # if the node has sink as its CH but it's not sink itself and the node is not dead
-            if sender.MCH == self.n and sender.id != self.n and sender.E > 0:
-                self.receivers = [self.n]  # Sink
-                sender = [sender.id]  # Other Nodes
-
-                print(f"node {sender} will send directly to sink ")
-                self.srp, self.rrp, self.sdp, self.rdp = send_receive_packets.start(
-                    self.Sensors, self.my_model, sender, self.receivers, self.srp, self.rrp, self.sdp, self.rdp,
-                    packet_type='Data'
-                )
-
     def statistics(self, round_number):
         print('######################################')
         print('############# STATISTICS #############')
         print('######################################')
 
-        self.sum_dead_nodes[round_number] = self.dead_num
+        self.sum_dead_nodes[round_number] = len(self.dead_num)
         self.ch_per_round[round_number] = self.no_of_ch
         self.SRP[round_number] = self.srp
         self.RRP[round_number] = self.rrp
@@ -496,7 +506,7 @@ class LEACHSimulation:
         else:
             self.Enheraf[round_number] = 0
 
-        # todo: maybe this is related to graph
+        # todo: maybe this is related to graph?
         # title(sprintf('Round=##d,Dead nodes=##d', round_number, deadNum))
 
         # todo: test
@@ -507,10 +517,11 @@ class LEACHSimulation:
         print("self.SDP", self.SDP)
         print("self.RDP", self.RDP)
         print('----------------------------------------------')
+
         # print('self.total_energy_dissipated', self.total_energy_dissipated)
         # print('self.AllSensorEnergy', self.AllSensorEnergy)
-        print('self.Sum_DEAD', self.sum_dead_nodes)
-        print('self.CLUSTERHS', self.ch_per_round)
+        print('self.sum_dead_nodes', self.sum_dead_nodes)
+        print('self.ch_per_round', self.ch_per_round)
         print('self.alive_sensors', self.alive_sensors)
         print('self.sum_energy_all_nodes', self.sum_energy_left_all_nodes)
         print('self.avg_energy_All_sensor', self.avg_energy_All_sensor)
