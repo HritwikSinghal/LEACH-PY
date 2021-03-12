@@ -1,27 +1,25 @@
 from math import *
 
 
-class Area:
-    def __init__(self):
-        # Field Dimensions - x and y maximum (in meters)
+class Model:
+    def __init__(self, n):
+        self.n = n
+
+        # coordinates of field
         self.x = 1000
         self.y = 1000
 
-
-class Model:
-    def __init__(self, n, x, y):
-        self.n = n
-
         # Sink Motion pattern
-        self.sinkx = x * 0.5
-        self.sinky = y * 0.5
+        self.sinkx = self.x * 0.5
+        self.sinky = self.y * 0.5
+        self.sinkE = 100  # Energy of sink
 
         # Optimal Election Probability of a node to become cluster head
         self.p: float = 0.1
 
         # %%%%%%%%%%% Energy Model (all values in Joules and each value is for 1byte of data) %%%%%%%%%%%
         # Initial Energy
-        self.Eo: float = 2
+        self.Eo: float = 0.2
 
         # ETX = Energy dissipated in Transmission, ERX = in Receive
         self.Eelec: float = 50 * 0.000000001
@@ -54,7 +52,7 @@ class Model:
         self.NumPacket = 1
 
         # Radio Range
-        self.RR: float = 0.5 * x * sqrt(2)
+        self.RR: float = 0.5 * self.x * sqrt(2)
 
         # self.numRx = int(sqrt(self.p * self.n))
         # self.dr = x / self.numRx
@@ -62,7 +60,5 @@ class Model:
 
 
 def start(n):
-    myArea = Area()
-    myModel = Model(n, myArea.x, myArea.y)
-
-    return myArea, myModel
+    myModel = Model(n)
+    return myModel

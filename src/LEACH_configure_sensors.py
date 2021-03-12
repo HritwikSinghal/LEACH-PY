@@ -1,7 +1,11 @@
+import random
+
+from src.LEACH_set_parameters import *
+
+
 class Sensor:
 
     def __init__(self):
-        # Configuration EmptySensor
         self.xd = 0
         self.yd = 0
         self.G = 0
@@ -14,31 +18,28 @@ class Sensor:
         self.MCH = 0  # Member of which CH
 
 
-def start(Model, n, GX, GY):
-    # DO not use this, it will assign same object to all in array so all will have save xd, yd etc
-    # emptySensor = Sensor()
+def start(my_model: Model):
+    n = my_model.n
 
     # Configuration Sensors
     # created extra one slot for sink
-    Sensors = [
-        Sensor() for _ in range(n + 1)
-    ]
+    Sensors = [Sensor() for _ in range(n + 1)]
 
-    for i in range(n):
+    for i, sensor in enumerate(Sensors):
         # set x location
-        Sensors[i].xd = GX[i]
+        sensor.xd = random.randint(1, my_model.x)
         # set y location
-        Sensors[i].yd = GY[i]
+        sensor.yd = random.randint(1, my_model.y)
         # Determinate whether in previous periods a node has been cluster-head or not? not=0 and be=n
-        Sensors[i].G = 0
+        sensor.G = 0
         # dead flag. Whether dead or alive S[i].df=0 alive. S[i].df=1 dead.
-        Sensors[i].df = 0
-        # initially there are not each cluster heads 
-        Sensors[i].type = 'N'
+        sensor.df = 0
+        # initially there are not each cluster heads
+        sensor.type = 'N'
         # initially all nodes have equal Energy
-        Sensors[i].E = Model.Eo
+        sensor.E = my_model.Eo
         # id
-        Sensors[i].id = i
+        sensor.id = i
         # Sensors[i].RR=Model.RR
 
     # for sink
@@ -47,9 +48,9 @@ def start(Model, n, GX, GY):
     nth slot is for sink
     so for n=10, 0-9 are 10 normal sensors and 10th slot is for sink 
     """
-    Sensors[n].xd = Model.sinkx
-    Sensors[n].yd = Model.sinky
-    Sensors[n].E = 100
-    Sensors[n].id = Model.n
+    Sensors[n].xd = my_model.sinkx
+    Sensors[n].yd = my_model.sinky
+    Sensors[n].E = my_model.sinkE
+    Sensors[n].id = my_model.n
 
     return Sensors

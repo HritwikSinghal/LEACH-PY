@@ -4,7 +4,6 @@ from src import LEACH_configure_sensors
 from src import LEACH_plotter
 from src import LEACH_select_ch
 from src import LEACH_set_parameters
-from src import create_random_sensors
 from src import dis_to_sink
 from src import findReceiver
 from src import find_sender
@@ -103,14 +102,6 @@ class LEACHSimulation:
         # ########################################
         # todo: Plot sensors Here
 
-        # # ############################################################
-        # # ############# Set Initial Parameters for Nodes #############
-        # # ############################################################
-        # print('############################################################')
-        # print('############# Set Initial Parameters for Nodes #############')
-        # print('############################################################')
-        # print()
-
         # ############################################
         # ############# Start Simulation #############
         # ############################################
@@ -135,11 +126,9 @@ class LEACHSimulation:
         print()
 
         # Create sensor nodes, Set Parameters and Create Energy Model
-        self.my_area, self.my_model = LEACH_set_parameters.start(self.n)  # Set Parameters self.Sensors and Network
+        self.my_model = LEACH_set_parameters.start(self.n)  # Set Parameters self.Sensors and Network
 
         # todo: test
-        print("self.myArea")
-        print(vars(self.my_area))
         print("self.myModel")
         print(vars(self.my_model))
         print('----------------------------------------------')
@@ -186,20 +175,13 @@ class LEACHSimulation:
         '''
 
         # Create a random scenario & Load sensor Location
-        self.X, self.Y = create_random_sensors.start(self.my_model, self.my_area)
-
         # configure sensors
-        self.Sensors = LEACH_configure_sensors.start(self.my_model, self.n, self.X, self.Y)
+        self.Sensors = LEACH_configure_sensors.start(self.my_model)
 
         for sensor in self.Sensors:
             self.initEnergy += sensor.E
 
         # todo: test
-        print("Sensors X co-ordinates:")
-        pp(self.X)
-        print("Sensors Y co-ordinates:")
-        pp(self.Y)
-        print()
         var_pp(self.Sensors)
         print("self.initEnergy", self.initEnergy)
         print('----------------------------------------------')
