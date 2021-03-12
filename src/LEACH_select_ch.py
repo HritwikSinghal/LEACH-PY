@@ -1,5 +1,4 @@
-import random
-from src.LEACH_set_parameters import *
+
 from src.LEACH_create_sensors import *
 
 
@@ -15,7 +14,7 @@ def zeros(row, column):
     return re_list
 
 
-def start(Sensors: list[Sensor], myModel: Model, round_number: int):
+def start(Sensors: list[Sensor], myModel, round_number: int):
     CH = []
     # countCHs = 0 # no use
     n = myModel.n

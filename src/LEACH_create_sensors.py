@@ -1,7 +1,5 @@
 import random
-
-from src.LEACH_set_parameters import *
-
+from math import *
 
 class Sensor:
     def __init__(self):
@@ -15,9 +13,10 @@ class Sensor:
         self.dis2sink: float = 0
         self.dis2ch: float = 0
         self.MCH = 0  # Member of which CH
+        self.RR = 0
 
 
-def start(my_model: Model):
+def start(my_model):
     n = my_model.n
 
     # Configuration Sensors
@@ -50,10 +49,10 @@ def start(my_model: Model):
         sensor.E = my_model.Eo
         # id
         sensor.id = i
-        # Sensors[i].RR=Model.RR
-
+        # Radio range
+        sensor.RR = my_model.RR
         # Dist to sink
         sensor.dis2sink = sqrt(pow((sensor.xd - Sensors[-1].xd), 2) + pow((sensor.yd - Sensors[-1].yd), 2))
-        print(f'Dist to sink: {Sensors[-1].id} for {sensor.id} is {sensor.dis2sink}')
+        # print(f'Dist to sink: {Sensors[-1].id} for {sensor.id} is {sensor.dis2sink}')
 
     return Sensors

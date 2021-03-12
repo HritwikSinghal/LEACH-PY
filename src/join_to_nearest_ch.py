@@ -1,5 +1,3 @@
-from math import *
-from src.LEACH_set_parameters import *
 from src.LEACH_create_sensors import *
 
 
@@ -13,7 +11,7 @@ def zeros(row, column):
     return re_list
 
 
-def get_min_and_id_of_ch(myModel: Model, TotalCH, distance: list):
+def get_min_and_id_of_ch(myModel, TotalCH, distance: list):
     min_dist_from_all_ch = []
     id_of_min_dist_ch = []
 
@@ -34,7 +32,7 @@ def get_min_and_id_of_ch(myModel: Model, TotalCH, distance: list):
     return min_dist_from_all_ch, id_of_min_dist_ch
 
 
-def start(Sensors: list[Sensor], myModel: Model, TotalCH):
+def start(Sensors: list[Sensor], myModel, TotalCH):
     print('# ######################################################')
     print('# ############# Sensors join to nearest CH #############')
     print('# ######################################################')
@@ -76,8 +74,10 @@ def start(Sensors: list[Sensor], myModel: Model, TotalCH):
             if sensor.E > 0:
                 # if node is in RR CH and is Nearer to CH rather than Sink
                 if min_dist_from_all_ch[i] <= myModel.RR and min_dist_from_all_ch[i] < sensor.dis2sink:
+                    print(f"{sensor.id} is joining {TotalCH[id_of_min_dist_ch[i]]}")
                     sensor.MCH = TotalCH[id_of_min_dist_ch[i]]
                     sensor.dis2ch = min_dist_from_all_ch[i]
                 else:
+                    print(f"{sensor.id} is joining sink")
                     sensor.MCH = total_nodes
                     sensor.dis2ch = sensor.dis2sink

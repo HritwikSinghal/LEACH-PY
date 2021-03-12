@@ -1,10 +1,7 @@
-import pprint
-
 from src.LEACH_create_sensors import *
-from src.LEACH_set_parameters import *
 
 
-def send_rec(Sensors: list[Sensor], myModel: Model, sender, receiver, PacketSize, sap, rap):
+def send_rec(Sensors: list[Sensor], myModel, sender, receiver, PacketSize, sap, rap):
     # for senders
     # the packet will be sent only if the sender has energy left after transmission
     if Sensors[sender].E > 0:
@@ -12,8 +9,8 @@ def send_rec(Sensors: list[Sensor], myModel: Model, sender, receiver, PacketSize
         sap += 1
         print(f'{sender} sent packet. New energy of {sender} = {Sensors[sender].E}')
     else:
+        print(f"node {Sensors[sender].id} is Dead")
         Sensors[sender].df = 1
-        Sensors[sender].E = 0
 
     # for receivers
     # Energy dissipated from receivers for Receiving a packet
@@ -30,7 +27,7 @@ def send_rec(Sensors: list[Sensor], myModel: Model, sender, receiver, PacketSize
     return rap, sap
 
 
-def start(Sensors: list[Sensor], myModel: Model, senders: list, receivers: list, srp, rrp, sdp, rdp, packet_type: str):
+def start(Sensors: list[Sensor], myModel, senders: list, receivers: list, srp, rrp, sdp, rdp, packet_type: str):
     sap = 0  # Send a packet or Number of sent packets
     rap = 0  # Receive a packet or Number of received packets
     if packet_type == 'Hello':

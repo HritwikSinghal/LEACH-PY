@@ -1,16 +1,13 @@
-from src import LEACH_set_parameters
-from math import *
-from src.LEACH_set_parameters import *
-from src.LEACH_create_sensors import *
-
 import matplotlib
+
+from src.LEACH_create_sensors import *
 
 matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 
 
 # todo: add condition to show sink only as red dot and not both red and blue
-def start(Sensors: [Sensor], myModel: Model):
+def start(Sensors: [Sensor], myModel):
     print('########################################')
     print('############# plot Sensors #############')
     print('########################################')
