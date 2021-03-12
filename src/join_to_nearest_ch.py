@@ -1,4 +1,4 @@
-from src.LEACH_create_sensors import *
+from src.LEACH_create_basics import *
 
 
 def zeros(row, column):
@@ -11,7 +11,7 @@ def zeros(row, column):
     return re_list
 
 
-def get_min_and_id_of_ch(myModel, TotalCH, distance: list):
+def get_min_and_id_of_ch(myModel: Model, TotalCH, distance: list):
     min_dist_from_all_ch = []
     id_of_min_dist_ch = []
 
@@ -32,7 +32,7 @@ def get_min_and_id_of_ch(myModel, TotalCH, distance: list):
     return min_dist_from_all_ch, id_of_min_dist_ch
 
 
-def start(Sensors: list[Sensor], myModel, TotalCH):
+def start(Sensors: list[Sensor], myModel: Model, TotalCH):
     print('# ######################################################')
     print('# ############# Sensors join to nearest CH #############')
     print('# ######################################################')

@@ -1,5 +1,5 @@
 
-from src.LEACH_create_sensors import *
+from src.LEACH_create_basics import *
 
 
 def zeros(row, column):

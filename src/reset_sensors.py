@@ -1,9 +1,9 @@
 from math import inf
 
-from src.LEACH_create_sensors import *
+from src.LEACH_create_basics import *
 
 
-def start(Sensors: list[Sensor], my_model, dead_num: list[Sensor], round_number):
+def start(Sensors: list[Sensor], my_model: Model, dead_num: list[Sensor], round_number):
     for sensor in Sensors:
         print(f"\nresetting {sensor.id}")
 

@@ -1,7 +1,7 @@
 import pprint
 from math import *
 
-from src import LEACH_create_sensors
+from src import LEACH_create_basics
 from src import LEACH_select_ch
 from src import findReceiver
 from src import find_sender
@@ -39,63 +39,6 @@ def zeros(row, column):
     return re_list
 
 
-class Model:
-    def __init__(self, n):
-        self.n = n
-
-        # coordinates of field
-        self.x = 1000
-        self.y = 1000
-
-        # Sink Motion pattern
-        self.sinkx = self.x * 0.5
-        self.sinky = self.y * 0.5
-        self.sinkE = 100  # Energy of sink
-
-        # Optimal Election Probability of a node to become cluster head
-        self.p: float = 0.1
-
-        # %%%%%%%%%%% Energy Model (all values in Joules and each value is for 1byte of data) %%%%%%%%%%%
-        # Initial Energy
-        self.Eo: float = 0.2
-
-        # ETX = Energy dissipated in Transmission, ERX = in Receive
-        self.Eelec: float = 50 * 0.000000001
-        self.ETX: float = 50 * 0.000000001
-        self.ERX: float = 50 * 0.000000001
-
-        # Transmit Amplifier types
-        self.Efs: float = 10e-12
-        self.Emp: float = 0.0013 * 0.000000000001
-
-        # Data Aggregation Energy
-        self.EDA: float = 5 * 0.000000001
-
-        # Computation of do
-        self.do: float = sqrt(self.Efs / self.Emp)
-
-        # %%%%%%%%%%%%%%%%%%%%%%%%% Run Time Parameters %%%%%%%%%%%%%%%%%%%%%%%%%
-        # maximum number of rounds
-        self.rmax = 50
-
-        # Data packet size
-        self.DpacketLen = 4000
-
-        # Hello packet size
-        self.HpacketLen = 100
-
-        # todo : change this to 10
-        # Number of Packets sent in steady-state phase
-        self.NumPacket = 1
-
-        # Radio Range
-        self.RR: float = 0.5 * self.x * sqrt(2)
-
-        # self.numRx = int(sqrt(self.p * self.n))
-        # self.dr = x / self.numRx
-        # %%%%%%%%%%%%%%%%%%%%%%%%% END OF PARAMETERS %%%%%%%%%%%%%%%%%%%%%%%%
-
-
 class LEACHSimulation:
 
     def __init__(self, n=200):
@@ -110,7 +53,7 @@ class LEACHSimulation:
         self.initEnergy = 0  # Initial Energy
 
         # Create sensor nodes, Set Parameters and Create Energy Model
-        self.my_model = Model(self.n)  # Set Parameters self.Sensors and Network
+        self.my_model = LEACH_create_basics.Model(self.n)  # Set Parameters self.Sensors and Network
 
         # Below will be of length(Max_rounds) so each element will store the total packets in each round
         # the length is rmax + 1 since we take one initialization round also.
@@ -208,7 +151,7 @@ class LEACHSimulation:
 
         # Create a random scenario & Load sensor Location
         # configure sensors
-        self.Sensors = LEACH_create_sensors.start(self.my_model)
+        self.Sensors = LEACH_create_basics.create_sensors(self.my_model)
 
         for sensor in self.Sensors:
             self.initEnergy += sensor.E
@@ -252,8 +195,7 @@ class LEACHSimulation:
         print("self.rrp", self.rrp)
         print("self.sdp", self.sdp)
         print("self.rdp", self.rdp)
-        print("Sensors: ", )
-        var_pp(self.Sensors)
+        print("Sensors: \n", var_pp(self.Sensors))
 
         # Save metrics, Round 0 is initialization phase where all nodes send routing packets (hello) to Sink as above
         self.SRP[0] = self.srp

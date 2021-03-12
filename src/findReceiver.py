@@ -1,4 +1,4 @@
-from src.LEACH_create_sensors import *
+from src.LEACH_create_basics import *
 
 
 def zeros(row, column):
@@ -14,7 +14,7 @@ def zeros(row, column):
     return re_list
 
 
-def start(Sensors: list[Sensor], myModel, sender, senderRR):
+def start(Sensors: list[Sensor], myModel: Model, sender, senderRR):
     Receiver = []
 
     # Calculate Distance All Sensor With Sender
