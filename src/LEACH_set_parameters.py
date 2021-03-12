@@ -17,31 +17,31 @@ class Model:
         self.sinky = y * 0.5
 
         # Optimal Election Probability of a node to become cluster head
-        self.p = 0.1
+        self.p: float = 0.1
 
         # %%%%%%%%%%% Energy Model (all values in Joules and each value is for 1byte of data) %%%%%%%%%%%
         # Initial Energy
-        self.Eo = 2
+        self.Eo: float = 2
 
         # ETX = Energy dissipated in Transmission, ERX = in Receive
-        self.Eelec = 50 * 0.000000001
-        self.ETX = 50 * 0.000000001
-        self.ERX = 50 * 0.000000001
+        self.Eelec: float = 50 * 0.000000001
+        self.ETX: float = 50 * 0.000000001
+        self.ERX: float = 50 * 0.000000001
 
         # Transmit Amplifier types
-        self.Efs = 10e-12
-        self.Emp = 0.0013 * 0.000000000001
+        self.Efs: float = 10e-12
+        self.Emp: float = 0.0013 * 0.000000000001
 
         # Data Aggregation Energy
-        self.EDA = 5 * 0.000000001
+        self.EDA: float = 5 * 0.000000001
 
         # Computation of do
-        self.do = sqrt(self.Efs / self.Emp)
+        self.do: float = sqrt(self.Efs / self.Emp)
 
         # %%%%%%%%%%%%%%%%%%%%%%%%% Run Time Parameters %%%%%%%%%%%%%%%%%%%%%%%%%
         # todo : change this to 200
         # maximum number of rounds
-        self.rmax = 100
+        self.rmax = 50
 
         # Data packet size
         self.DpacketLen = 4000
@@ -54,7 +54,7 @@ class Model:
         self.NumPacket = 1
 
         # Radio Range
-        self.RR = 0.5 * x * sqrt(2)
+        self.RR: float = 0.5 * x * sqrt(2)
 
         # self.numRx = int(sqrt(self.p * self.n))
         # self.dr = x / self.numRx

@@ -50,7 +50,7 @@ class LEACHSimulation:
         # ########################################################
         # ############# For set_init_param_for_nodes #############
         # ########################################################
-        self.deadNum = 0  # Number of dead nodes
+        self.dead_num = 0  # Number of dead nodes
         self.countCHs = 0  # counter for CHs
         self.flag_first_dead = 0  # flag_first_dead
         self.initEnergy = 0  # Initial Energy
@@ -102,7 +102,6 @@ class LEACHSimulation:
         # ############# plot Sensors #############
         # ########################################
         # todo: Plot sensors Here
-        # self.deadNum = LEACH_plotter.start(self.Sensors, self.my_model, self.deadNum)
 
         # # ############################################################
         # # ############# Set Initial Parameters for Nodes #############
@@ -288,10 +287,10 @@ class LEACHSimulation:
             # ########################################
             # ############# plot Sensors #############
             # ########################################
-            self.deadNum = LEACH_plotter.start(self.Sensors, self.my_model, self.deadNum)
+            LEACH_plotter.start(self.Sensors, self.my_model)
 
             # Save the period in which the first node died
-            if self.deadNum > 0 and not self.flag_first_dead == 0:
+            if self.dead_num > 0 and not self.flag_first_dead == 0:
                 print(f'first dead in round: {round_number}')
                 self.first_dead = round_number
                 self.flag_first_dead = 1
@@ -340,11 +339,12 @@ class LEACHSimulation:
             # ############# STATISTICS #############
             # ######################################
             self.statistics(round_number)
+            print(f'deadnum = {self.dead_num}, n={self.n}')
 
-            # if all nodes are dead, exit
-            if self.n == self.deadNum:
+            # if all nodes are dead or only sink is left, exit
+            if self.dead_num >= self.n:
                 self.lastPeriod = round_number
-                print(f"all dead (dead={self.deadNum}) in round {round_number}")
+                print(f"all dead (dead={self.dead_num}) in round {round_number}")
                 break
 
     def __initialization_main_loop(self, round_number):
@@ -359,7 +359,7 @@ class LEACHSimulation:
         self.sdp = 0  # counter number of sent data packets to sink
         self.rdp = 0  # counter number of receive data packets by sink
 
-        reset_sensors.start(self.Sensors, self.my_model)
+        self.dead_num = reset_sensors.start(self.Sensors, self.my_model, self.dead_num)
 
         # todo: test
         print("\n\nAfter Reset")
@@ -473,7 +473,6 @@ class LEACHSimulation:
             # ############# plot Sensors #############
             # ########################################
             # todo: Plot here
-            # self.deadNum = LEACH_plotter.start(self.Sensors, self.my_model, self.deadNum)
 
             # #############################################################
             # ############# All sensor send data packet to CH #############
@@ -562,7 +561,7 @@ class LEACHSimulation:
         print('############# STATISTICS #############')
         print('######################################')
 
-        self.sum_dead_nodes[round_number] = self.deadNum
+        self.sum_dead_nodes[round_number] = self.dead_num
         self.ch_per_round[round_number] = self.countCHs
         self.SRP[round_number] = self.srp
         self.RRP[round_number] = self.rrp

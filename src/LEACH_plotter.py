@@ -10,14 +10,13 @@ import matplotlib.pyplot as plt
 
 
 # todo: add condition to show sink only as red dot and not both red and blue
-def start(Sensors: [Sensor], myModel: Model, deadnum):
+def start(Sensors: [Sensor], myModel: Model):
     print('########################################')
     print('############# plot Sensors #############')
     print('########################################')
     print()
 
     n = myModel.n
-    deadNum = 0
     plt.plot([Sensors[n].xd], [Sensors[n].yd], 'r^', label="Sink")
 
     # numRx = myModel.numRx
@@ -74,6 +73,3 @@ def start(Sensors: [Sensor], myModel: Model, deadnum):
     text(Sensors(n+1).xd+1,Sensors(n+1).yd-1,'Sink');
     axis square
     '''
-
-    # todo: return correct deadnum OR dont calc this here
-    return deadNum

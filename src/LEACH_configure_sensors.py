@@ -7,10 +7,10 @@ class Sensor:
         self.G = 0
         self.df = 0
         self.type = 'N'
-        self.E = 0
+        self.E: float = 0
         self.id = 0
-        self.dis2sink = 0
-        self.dis2ch = 0
+        self.dis2sink: float = 0
+        self.dis2ch: float = 0
         self.MCH = 0  # Member of which CH
 
 
