@@ -87,13 +87,17 @@ class LEACHSimulation:
         # ##########################################
         # ############# For statistics #############
         # ##########################################
-        self.alive = 0
+        self.alive = self.n
 
         # self.total_energy_dissipated = zeros(1, self.myModel.rmax + 1)
         # self.AllSensorEnergy = zeros(1, self.myModel.rmax + 1)
         self.sum_dead_nodes = zeros(1, self.my_model.rmax + 1)
         self.ch_per_round = zeros(1, self.my_model.rmax + 1)
+
+        # all sensors should be alive in start
         self.alive_sensors = zeros(1, self.my_model.rmax + 1)
+        self.alive_sensors[0] = self.n
+
         self.sum_energy_left_all_nodes = zeros(1, self.my_model.rmax + 1)
         self.avg_energy_All_sensor = zeros(1, self.my_model.rmax + 1)
         self.consumed_energy = zeros(1, self.my_model.rmax + 1)
@@ -176,6 +180,10 @@ class LEACHSimulation:
 
         for sensor in self.Sensors:
             self.initEnergy += sensor.E
+
+        # We will have full energy in start
+        self.sum_energy_left_all_nodes[0] = self.initEnergy
+        self.avg_energy_All_sensor[0] = self.initEnergy / self.n
 
         # todo: test
         var_pp(self.Sensors)
