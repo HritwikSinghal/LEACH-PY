@@ -1,5 +1,8 @@
 import pprint
 from math import *
+import matplotlib
+matplotlib.use('TkAgg')
+import matplotlib.pyplot as plt
 
 from src import LEACH_create_basics
 from src import LEACH_select_ch
@@ -8,6 +11,7 @@ from src import find_sender
 from src import join_to_nearest_ch
 from src import reset_sensors
 from src import send_receive_packets
+from src import LEACH_plotter
 
 
 # #################################################
@@ -140,6 +144,22 @@ class LEACHSimulation:
         # ############# Main loop program #############
         # #############################################
         self.__main_loop()
+
+        plt.xlim(left=1, right=self.my_model.rmax)
+        plt.ylim(bottom=0, top=self.n)
+        plt.plot(self.alive_sensors)
+        plt.title("Life time of sensor nodes")
+        plt.xlabel('Rounds')
+        plt.ylabel('No. of live nodes')
+        plt.show()
+
+        plt.xlim(left=1, right=self.my_model.rmax)
+        plt.ylim(bottom=0, top=self.n * self.my_model.Eo)
+        plt.plot(self.sum_energy_left_all_nodes)
+        plt.title("Average residual energy ")
+        plt.xlabel('Rounds')
+        plt.ylabel('Energy (J)')
+        plt.show()
 
         # ##############################################
         # ############# END of simulation ##############
@@ -336,7 +356,7 @@ class LEACHSimulation:
         # ############# plot Sensors #############
         # ########################################
         # Todo: plot here
-
+        LEACH_plotter.start(self.Sensors,self.my_model,round_number)
         # ##############################################################
         # ############# end of cluster head election phase #############
         # ##############################################################
@@ -491,7 +511,7 @@ class LEACHSimulation:
 
         self.alive = 0
         sum_energy_left_all_nodes_in_curr_round = 0
-        for sensor in self.Sensors:
+        for sensor in self.Sensors[:-1]:
             if sensor.E > 0:
                 self.alive += 1
                 sum_energy_left_all_nodes_in_curr_round += sensor.E
