@@ -145,20 +145,23 @@ class LEACHSimulation:
         # #############################################
         self.__main_loop()
 
-        plt.xlim(left=1, right=self.my_model.rmax)
+        plt.xlim(left=0, right=self.my_model.rmax)
         plt.ylim(bottom=0, top=self.n)
         plt.plot(self.alive_sensors)
         plt.title("Life time of sensor nodes")
         plt.xlabel('Rounds')
         plt.ylabel('No. of live nodes')
+        # plt.ioff()
         plt.show()
 
-        plt.xlim(left=1, right=self.my_model.rmax)
+
+        plt.xlim(left=0, right=self.my_model.rmax)
         plt.ylim(bottom=0, top=self.n * self.my_model.Eo)
         plt.plot(self.sum_energy_left_all_nodes)
-        plt.title("Average residual energy ")
+        plt.title("Total residual energy ")
         plt.xlabel('Rounds')
         plt.ylabel('Energy (J)')
+        # plt.ioff()
         plt.show()
 
         # ##############################################
@@ -198,7 +201,7 @@ class LEACHSimulation:
         # configure sensors
         self.Sensors = LEACH_create_basics.create_sensors(self.my_model)
 
-        for sensor in self.Sensors:
+        for sensor in self.Sensors[:-1]:
             self.initEnergy += sensor.E
 
         # We will have full energy in start
@@ -356,7 +359,7 @@ class LEACHSimulation:
         # ############# plot Sensors #############
         # ########################################
         # Todo: plot here
-        LEACH_plotter.start(self.Sensors,self.my_model,round_number)
+        # LEACH_plotter.start(self.Sensors,self.my_model,round_number)
         # ##############################################################
         # ############# end of cluster head election phase #############
         # ##############################################################

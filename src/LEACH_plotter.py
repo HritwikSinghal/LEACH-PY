@@ -78,7 +78,9 @@ def start(Sensors: [Sensor], myModel: Model,round_number,deadNum=0):
     plt.xlabel('X [m]')
     plt.ylabel('Y [m]')
     plt.legend(loc='upper right')
+    # plt.ioff()
     plt.show()
+
 
 
     '''
