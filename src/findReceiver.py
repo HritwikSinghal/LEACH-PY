@@ -4,6 +4,7 @@ from src.LEACH_create_basics import *
 def zeros(row, column):
     re_list = []
     for x in range(row):
+        # Todo: UNCOMMENT
         # FindReceiver specific modification
         temp_list = [float(0) for _ in range(column)]
         if row == 1:
@@ -29,6 +30,7 @@ def start(Sensors: list[Sensor], myModel: Model, sender, senderRR):
         # node should be in RR and it should be not DEAD
         if distance[i] <= senderRR and sender != Sensors[i].id and Sensors[i].df == 0:
             Receiver.append(Sensors[i].id)
-            print(f"{sender} has reciever: {Sensors[i].id}")
+            # Todo: UNCOMMENT
+            # print(f"{sender} has reciever: {Sensors[i].id}")
 
     return Receiver

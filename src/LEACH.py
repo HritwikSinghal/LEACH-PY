@@ -1,6 +1,7 @@
 import pprint
 from math import *
 import matplotlib
+
 matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 
@@ -19,14 +20,18 @@ from src import LEACH_plotter
 
 
 def var_pp(stuff):
-    prettty_prrint = pprint.PrettyPrinter(indent=1)
-    for x in stuff:
-        prettty_prrint.pprint(vars(x))
+    pass
+    # Todo: UNCOMMENT
+    # prettty_prrint = pprint.PrettyPrinter(indent=1)
+    # for x in stuff:
+    #     prettty_prrint.pprint(vars(x))
 
 
 def pp(stuff):
-    prettty_prrint = pprint.PrettyPrinter(indent=4)
-    prettty_prrint.pprint(stuff)
+    print(stuff)
+    # Todo: UNCOMMENT
+    # prettty_prrint = pprint.PrettyPrinter(indent=4)
+    # prettty_prrint.pprint(stuff)
 
 
 # #################################################
@@ -145,24 +150,23 @@ class LEACHSimulation:
         # #############################################
         self.__main_loop()
 
-        plt.xlim(left=0, right=self.my_model.rmax)
-        plt.ylim(bottom=0, top=self.n)
-        plt.plot(self.alive_sensors)
-        plt.title("Life time of sensor nodes")
-        plt.xlabel('Rounds')
-        plt.ylabel('No. of live nodes')
-        # plt.ioff()
-        plt.show()
-
-
-        plt.xlim(left=0, right=self.my_model.rmax)
-        plt.ylim(bottom=0, top=self.n * self.my_model.Eo)
-        plt.plot(self.sum_energy_left_all_nodes)
-        plt.title("Total residual energy ")
-        plt.xlabel('Rounds')
-        plt.ylabel('Energy (J)')
-        # plt.ioff()
-        plt.show()
+        # Todo: all plotting should be done in Leach_plotter file
+        # plt.xlim(left=0, right=self.my_model.rmax)
+        # plt.ylim(bottom=0, top=self.n)
+        # plt.plot(self.alive_sensors)
+        # plt.title("Life time of sensor nodes")
+        # plt.xlabel('Rounds')
+        # plt.ylabel('No. of live nodes')
+        # # plt.ioff()
+        # plt.show()
+        #
+        # plt.xlim(left=0, right=self.my_model.rmax)
+        # plt.ylim(bottom=0, top=self.n * self.my_model.Eo)
+        # plt.plot(self.sum_energy_left_all_nodes)
+        # plt.title("Total residual energy ")
+        # plt.xlabel('Rounds')
+        # plt.ylabel('Energy (J)')
+        # plt.show()
 
         # ##############################################
         # ############# END of simulation ##############
@@ -268,6 +272,7 @@ class LEACHSimulation:
         print()
 
         for round_number in range(1, self.my_model.rmax + 1):
+            self.r = round_number
             print('#####################################')
             print(f'############# Round {round_number} #############')
             print('#####################################')
@@ -359,7 +364,7 @@ class LEACHSimulation:
         # ############# plot Sensors #############
         # ########################################
         # Todo: plot here
-        # LEACH_plotter.start(self.Sensors,self.my_model,round_number)
+
         # ##############################################################
         # ############# end of cluster head election phase #############
         # ##############################################################
@@ -408,7 +413,6 @@ class LEACHSimulation:
         print('##############################################')
         print()
 
-        # changed from 1 to self.myModel.NumPacket
         for i in range(self.my_model.NumPacket):  # Number of Packets to be sent in steady-state phase
 
             # ########################################

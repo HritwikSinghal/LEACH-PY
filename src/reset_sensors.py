@@ -5,7 +5,8 @@ from src.LEACH_create_basics import *
 
 def start(Sensors: list[Sensor], my_model: Model, round_number):
     for sensor in Sensors:
-        print(f"\nresetting {sensor.id}")
+        # Todo: UNCOMMENT
+        # print(f"\nresetting {sensor.id}")
 
         # allow to sensor to become cluster-head. LEACH Algorithm
         AroundClear = 1 / my_model.p  # After every "AroundClear" rounds, let every sensor be CH again

@@ -7,14 +7,14 @@ import matplotlib.pyplot as plt
 
 
 # todo: add condition to show sink only as red dot and not both red and blue
-def start(Sensors: [Sensor], myModel: Model,round_number,deadNum=0):
+def start(Sensors: [Sensor], myModel: Model, round_number, deadNum=0):
     print('########################################')
     print('############# plot Sensors #############')
     print('########################################')
     print()
 
     n = myModel.n
-    deadNum=0
+    deadNum = 0
     fig, axis = plt.subplots()
     axis.set_xlim(left=0, right=myModel.x)
     axis.set_ylim(bottom=0, top=myModel.y)
@@ -43,6 +43,7 @@ def start(Sensors: [Sensor], myModel: Model,round_number,deadNum=0):
     #
     # xp = [r * cos(each_angle) for each_angle in angle]
     # yp = [r * sin(each_angle) for each_angle in angle]
+
     n_flag = True
     c_flag = True
     d_flag = True
@@ -65,7 +66,7 @@ def start(Sensors: [Sensor], myModel: Model,round_number,deadNum=0):
                 # plot(Sensors(i).xd,Sensors(i).yd,'ko', 'MarkerSize', 5, 'MarkerFaceColor', 'r');
                 # pass  # todo: Plot here
         else:
-            deadNum+=1
+            deadNum += 1
             if d_flag:
                 axis.scatter([sensor.xd], [sensor.yd], c='w', edgecolors='k', label='Dead')
                 d_flag = False
@@ -73,15 +74,13 @@ def start(Sensors: [Sensor], myModel: Model,round_number,deadNum=0):
                 axis.scatter([sensor.xd], [sensor.yd], c='w', edgecolors='k')
     #         # plot(Sensors(i).xd,Sensors(i).yd,'ko', 'MarkerSize',5, 'MarkerFaceColor', 'w');
     #         pass  # todo: plot here
+
     axis.scatter([Sensors[n].xd], [Sensors[n].yd], s=80, c='b', edgecolors='k', label="Sink")
     plt.title('Network Plot for Leach \n Round no: %d' % round_number + '  Dead No: %d ' % deadNum)
     plt.xlabel('X [m]')
     plt.ylabel('Y [m]')
     plt.legend(loc='upper right')
-    # plt.ioff()
-    plt.show()
-
-
+    # plt.show()
 
     '''
     plot(Sensors(n+1).xd,Sensors(n+1).yd,'bo', 'MarkerSize', 8, 'MarkerFaceColor', 'b');

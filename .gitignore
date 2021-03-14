@@ -141,4 +141,5 @@ cython_debug/
 .idea/
 
 # LEACH
-lock*
+*~lock*
+out.txt
