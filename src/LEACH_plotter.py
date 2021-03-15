@@ -7,14 +7,13 @@ import matplotlib.pyplot as plt
 
 
 # todo: add condition to show sink only as red dot and not both red and blue
-def start(Sensors: [Sensor], myModel: Model, round_number, deadNum=0):
+def start(Sensors: [Sensor], myModel: Model, round_number):
     print('########################################')
     print('############# plot Sensors #############')
     print('########################################')
     print()
 
     n = myModel.n
-    deadNum = 0
     fig, axis = plt.subplots()
     axis.set_xlim(left=0, right=myModel.x)
     axis.set_ylim(bottom=0, top=myModel.y)

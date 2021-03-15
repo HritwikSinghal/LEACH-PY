@@ -53,7 +53,7 @@ def start(Sensors: list[Sensor], my_model: Model, senders: list, receivers: list
                                                              sent_packets, rec_packets)
 
                     else:
-                        Sensors[sender].E -= my_model.ETX * PacketSize + my_model.Efs * PacketSize * pow(distance, 4)
+                        Sensors[sender].E -= my_model.ETX * PacketSize + my_model.Efs * PacketSize * pow(distance, 2)
                         rec_packets, sent_packets = send_rec(Sensors, my_model, sender, receiver, PacketSize,
                                                              sent_packets, rec_packets)
 

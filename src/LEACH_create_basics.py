@@ -110,6 +110,7 @@ def create_sensors(my_model: Model):
         sensor.id = i
         # Radio range
         sensor.RR = my_model.RR
+        sensor.MCH = n
         # Dist to sink
         sensor.dis2sink = sqrt(pow((sensor.xd - Sensors[-1].xd), 2) + pow((sensor.yd - Sensors[-1].yd), 2))
         # print(f'Dist to sink: {Sensors[-1].id} for {sensor.id} is {sensor.dis2sink}')
