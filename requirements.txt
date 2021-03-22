@@ -1,0 +1,5 @@
+matplotlib
+tk
+Tcl
+# for arch based distros
+# sudo pacman -S tk

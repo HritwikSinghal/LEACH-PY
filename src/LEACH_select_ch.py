@@ -1,4 +1,3 @@
-
 from src.LEACH_create_basics import *
 
 
@@ -14,17 +13,17 @@ def zeros(row, column):
     return re_list
 
 
-def start(Sensors: list[Sensor], myModel, round_number: int):
+def start(sensors: list[Sensor], my_model, round_number: int):
     CH = []
     # countCHs = 0 # no use
-    n = myModel.n
+    n = my_model.n
 
     # numRx = myModel.numRx
     # dr = myModel.dr
     # CH_selected_arr = zeros(numRx, numRx)
 
     # sink can't be a CH
-    for senser in Sensors[:-1]:
+    for senser in sensors[:-1]:
 
         # # % these are the circle (x,y) for this node
         # row_circle_of_node = -1
@@ -55,16 +54,17 @@ def start(Sensors: list[Sensor], myModel, round_number: int):
 
         # If current sensor has energy left and has not been CH before And it is not dead
         # todo: keep either 'senser.E > 0' or 'senser.df == 0'
+
         if senser.E > 0 and senser.G <= 0:
             # Election of Cluster Heads
             temp_rand = random.uniform(0, 1)
-            value = myModel.p / (1 - myModel.p * (round_number % round(1 / myModel.p)))
+            value = my_model.p / (1 - my_model.p * (round_number % round(1 / my_model.p)))
             print(f'for {senser.id}, temprand = {temp_rand}, value = {value}')
             if temp_rand <= value:
                 print(f"Adding {senser.id} to CH")
                 CH.append(senser.id)
                 senser.type = 'C'
-                senser.G = round(1 / myModel.p) - 1
+                senser.G = round(1 / my_model.p) - 1
 
                 # # mark this cirle now that it has a CH
                 # CH_selected_arr(row_circle_of_node, col_circle_of_node) = 1

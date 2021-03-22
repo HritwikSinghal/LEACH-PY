@@ -4,7 +4,7 @@ from src.LEACH_create_basics import *
 
 
 def start(Sensors: list[Sensor], my_model: Model, round_number):
-    for sensor in Sensors:
+    for sensor in Sensors[:-1]:
         # Todo: UNCOMMENT
         # print(f"\nresetting {sensor.id}")
 
@@ -13,7 +13,10 @@ def start(Sensors: list[Sensor], my_model: Model, round_number):
         if round_number % AroundClear == 0:
             sensor.G = 0
 
-        sensor.MCH = my_model.n  # MCH = member of CH, initially all will have sink as their CH
+        # MCH = member of CH, initially all will have sink as their CH,
+        # so if n = 5, then my_model.n = 5 = 6th node (arrays start from 0)
+        sensor.MCH = my_model.n
+
         if sensor.type != 'S':
             sensor.type = 'N'
         sensor.dis2ch = inf

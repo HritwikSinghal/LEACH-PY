@@ -42,7 +42,7 @@ class Model:
         self.rmax = 200
 
         # Data packet size
-        self.DpacketLen = 4000
+        self.DpacketLen = 40000
 
         # Hello packet size
         self.HpacketLen = 100
@@ -86,6 +86,7 @@ def create_sensors(my_model: Model):
     first n - 1 slots in Sensors are for normal sensors. (0 to n-1) 
     nth slot is for sink
     so for n=10, 0-9 are 10 normal sensors and 10th slot is for sink 
+    so Sensor[10] = 11th node = sink
     """
     Sensors[n].xd = my_model.sinkx
     Sensors[n].yd = my_model.sinky

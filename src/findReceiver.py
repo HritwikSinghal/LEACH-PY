@@ -15,22 +15,22 @@ def zeros(row, column):
     return re_list
 
 
-def start(Sensors: list[Sensor], myModel: Model, sender, senderRR):
-    Receiver = []
+def start(sensors: list[Sensor], my_model: Model, sender, sender_rr):
+    receiver = []
 
     # Calculate Distance All Sensor With Sender
     # [Note that for doing so you need to access the global fig variable]
-    n = myModel.n
+    n = my_model.n
     distance = zeros(1, n)
 
-    for i in range(n):
+    for i, sensor in enumerate(sensors):
         distance[i] = sqrt(
-            pow(Sensors[i].xd - Sensors[sender].xd, 2) + pow(Sensors[i].yd - Sensors[sender].yd, 2)
+            pow(sensor.xd - sensors[sender].xd, 2) + pow(sensor.yd - sensors[sender].yd, 2)
         )
         # node should be in RR and it should be not DEAD
-        if distance[i] <= senderRR and sender != Sensors[i].id and Sensors[i].E > 0:
-            Receiver.append(Sensors[i].id)
+        if distance[i] <= sender_rr and sender != sensor.id and sensor.E > 0:
+            receiver.append(sensor.id)
             # Todo: UNCOMMENT
             # print(f"{sender} has reciever: {Sensors[i].id}")
 
-    return Receiver
+    return receiver
