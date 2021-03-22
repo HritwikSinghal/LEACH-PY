@@ -27,7 +27,7 @@ def start(sensors: list[Sensor], my_model: Model, sender, sender_rr):
             pow(sensor.xd - sensors[sender].xd, 2) + pow(sensor.yd - sensors[sender].yd, 2)
         )
         # node should be in RR and it should be not DEAD
-        if distance[i] <= sender_rr and sender != sensor.id and sensor.E > 0:
+        if distance[i] <= sender_rr and sender != sensor.id:
             receiver.append(sensor.id)
             # Todo: UNCOMMENT
             # print(f"{sender} has reciever: {sensor.id}")

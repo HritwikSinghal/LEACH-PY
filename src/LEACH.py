@@ -271,7 +271,7 @@ class LEACHSimulation:
         print("#############################################")
         print()
 
-        for round_number in range(1, self.my_model.rmax + 1):
+        for round_number in range(0, self.my_model.rmax):
             self.r = round_number
             print('#####################################')
             print(f'############# Round {round_number} #############')
@@ -284,8 +284,17 @@ class LEACHSimulation:
             print('############# Main loop Initialization #############')
             print('####################################################')
             print()
+            self.srp = 0  # counter number of sent routing packets
+            self.rrp = 0  # counter number of receive routing packets
+            self.sdp = 0  # counter number of sent data packets to sink
+            self.rdp = 0  # counter number of receive data packets by sink
 
-            self.srp, self.rrp, self.sdp, self.rdp = reset_sensors.start(self.Sensors, self.my_model, round_number)
+            self.SRP[round_number+1] = self.srp
+            self.RRP[round_number+1] = self.rrp
+            self.SDP[round_number+1] = self.sdp
+            self.RDP[round_number+1] = self.rdp
+            reset_sensors.start(self.Sensors, self.my_model, round_number)
+
 
             # todo: test
             print("Sensors: ", )
@@ -294,7 +303,15 @@ class LEACHSimulation:
             # ########################################
             # ############# plot Sensors #############
             # ########################################
+            death_num=0
+            for sensor in self.Sensors:
+                if(sensor.E<=0):
+                    death_num+=1
 
+            if death_num>=1:
+                if self.flag_first_dead == 0:
+                    self.first_dead = round_number
+                    self.flag_first_dead = 1
             # #################################################
             # ############# cluster head election #############
             # #################################################
@@ -413,7 +430,7 @@ class LEACHSimulation:
         print('##############################################')
         print()
 
-        for i in range(self.my_model.NumPacket):  # Number of Packets to be sent in steady-state phase
+        for i in range(1):  # Number of Packets to be sent in steady-state phase
 
             # ########################################
             # ############# plot Sensors #############
@@ -430,8 +447,6 @@ class LEACHSimulation:
 
             for receiver in self.list_CH:
                 sender = find_sender.start(self.Sensors, receiver)
-                if len(sender) == 0:
-                    continue
 
                 # todo: test
                 print("sender: ", sender)

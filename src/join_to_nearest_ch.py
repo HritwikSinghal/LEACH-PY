@@ -79,5 +79,5 @@ def start(Sensors: list[Sensor], myModel: Model, TotalCH):
                     sensor.dis2ch = min_dist_from_all_ch[i]
                 else:
                     print(f"{sensor.id} is joining sink")
-                    sensor.MCH = total_nodes
+                    sensor.MCH = total_nodes +1
                     sensor.dis2ch = sensor.dis2sink
