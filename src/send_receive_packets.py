@@ -32,7 +32,7 @@ def start(Sensors: list[Sensor], my_model: Model, senders: list, receivers: list
     sent_packets = 0  # Number of sent packets
     rec_packets = 0  # Number of received packets
 
-    PacketSize = my_model.HpacketLen if packet_type == 'Hello' else my_model.DpacketLen
+    PacketSize = my_model.hello_packet_len if packet_type == 'Hello' else my_model.data_packet_len
 
     # Energy dissipated from Sensors for Sending a packet
     # Each sender will send to each receiver

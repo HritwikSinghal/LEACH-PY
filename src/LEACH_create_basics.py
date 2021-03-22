@@ -11,8 +11,8 @@ class Model:
         self.y = 1000
 
         # Sink Motion pattern
-        self.sinkx = self.x * 0.5
-        self.sinky = self.y * 0.5
+        self.sink_x = self.x * 0.5
+        self.sink_y = self.y * 0.5
         self.sinkE = 100  # Energy of sink
 
         # Optimal Election Probability of a node to become cluster head
@@ -42,10 +42,10 @@ class Model:
         self.rmax = 200
 
         # Data packet size
-        self.DpacketLen = 40000
+        self.data_packet_len = 4000
 
         # Hello packet size
-        self.HpacketLen = 100
+        self.hello_packet_len = 100
 
         # todo : change this to 10
         # Number of Packets sent in steady-state phase
@@ -77,24 +77,24 @@ class Sensor:
 def create_sensors(my_model: Model):
     n = my_model.n
 
-    # Configuration Sensors
+    # Configuration sensors
     # created extra one slot for sink
-    Sensors = [Sensor() for _ in range(n + 1)]
+    sensors = [Sensor() for _ in range(n + 1)]
 
     # for sink
     """ 
-    first n - 1 slots in Sensors are for normal sensors. (0 to n-1) 
+    first n - 1 slots in sensors are for normal sensors. (0 to n-1) 
     nth slot is for sink
     so for n=10, 0-9 are 10 normal sensors and 10th slot is for sink 
     so Sensor[10] = 11th node = sink
     """
-    Sensors[n].xd = my_model.sinkx
-    Sensors[n].yd = my_model.sinky
-    Sensors[n].E = my_model.sinkE
-    Sensors[n].id = my_model.n
-    Sensors[n].type = 'S'
+    sensors[n].xd = my_model.sink_x
+    sensors[n].yd = my_model.sink_y
+    sensors[n].E = my_model.sinkE
+    sensors[n].id = my_model.n
+    sensors[n].type = 'S'
 
-    for i, sensor in enumerate(Sensors[:-1]):
+    for i, sensor in enumerate(sensors[:-1]):
         # set x location
         sensor.xd = random.randint(1, my_model.x)
         # set y location
@@ -113,7 +113,7 @@ def create_sensors(my_model: Model):
         sensor.RR = my_model.RR
         sensor.MCH = n
         # Dist to sink
-        sensor.dis2sink = sqrt(pow((sensor.xd - Sensors[-1].xd), 2) + pow((sensor.yd - Sensors[-1].yd), 2))
-        # print(f'Dist to sink: {Sensors[-1].id} for {sensor.id} is {sensor.dis2sink}')
+        sensor.dis2sink = sqrt(pow((sensor.xd - sensors[-1].xd), 2) + pow((sensor.yd - sensors[-1].yd), 2))
+        # print(f'Dist to sink: {sensors[-1].id} for {sensor.id} is {sensor.dis2sink}')
 
-    return Sensors
+    return sensors
