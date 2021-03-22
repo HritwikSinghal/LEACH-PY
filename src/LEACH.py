@@ -379,7 +379,7 @@ class LEACHSimulation:
         print('#########################################################################################')
         print()
 
-        # Broadcasting CH x to All Sensors that are in Radio Rage of x.
+        # Broadcasting CH x to All Sensors that are in Radio Rage of x. (dont broadcast to sink)
         # Doing this for all CH
         for ch_id in self.list_CH:
             # todo: test

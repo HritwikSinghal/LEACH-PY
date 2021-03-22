@@ -19,11 +19,10 @@ def start(sensors: list[Sensor], my_model: Model, sender, sender_rr):
     receiver = []
 
     # Calculate Distance All Sensor With Sender
-    # [Note that for doing so you need to access the global fig variable]
     n = my_model.n
     distance = zeros(1, n)
 
-    for i, sensor in enumerate(sensors):
+    for i, sensor in enumerate(sensors[:-1]):
         distance[i] = sqrt(
             pow(sensor.xd - sensors[sender].xd, 2) + pow(sensor.yd - sensors[sender].yd, 2)
         )
@@ -31,6 +30,6 @@ def start(sensors: list[Sensor], my_model: Model, sender, sender_rr):
         if distance[i] <= sender_rr and sender != sensor.id and sensor.E > 0:
             receiver.append(sensor.id)
             # Todo: UNCOMMENT
-            # print(f"{sender} has reciever: {Sensors[i].id}")
+            # print(f"{sender} has reciever: {sensor.id}")
 
     return receiver
