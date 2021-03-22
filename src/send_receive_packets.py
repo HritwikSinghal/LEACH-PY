@@ -37,23 +37,25 @@ def start(Sensors: list[Sensor], my_model: Model, senders: list, receivers: list
     # Energy dissipated from Sensors for Sending a packet
     # Each sender will send to each receiver
     for sender in senders:
-        for receiver in receivers:
-            print()
-            distance = sqrt(
-                pow(Sensors[sender].xd - Sensors[receiver].xd, 2) +
-                pow(Sensors[sender].yd - Sensors[receiver].yd, 2)
-            )
-            print(f"dist b/w sender: {sender} and receiver: {receiver} is: {distance}")
+        if Sensors[sender].E > 0:
+            for receiver in receivers:
+                if Sensors[receiver].E > 0:
+                    print()
+                    distance = sqrt(
+                        pow(Sensors[sender].xd - Sensors[receiver].xd, 2) +
+                        pow(Sensors[sender].yd - Sensors[receiver].yd, 2)
+                    )
+                    print(f"dist b/w sender: {sender} and receiver: {receiver} is: {distance}")
 
-            if distance > my_model.do:
-                Sensors[sender].E -= my_model.ETX * PacketSize + my_model.Emp * PacketSize * pow(distance, 4)
-                rec_packets, sent_packets = send_rec(Sensors, my_model, sender, receiver, PacketSize,
-                                                     sent_packets, rec_packets)
+                    if distance > my_model.do:
+                        Sensors[sender].E -= my_model.ETX * PacketSize + my_model.Emp * PacketSize * pow(distance, 4)
+                        rec_packets, sent_packets = send_rec(Sensors, my_model, sender, receiver, PacketSize,
+                                                             sent_packets, rec_packets)
 
-            else:
-                Sensors[sender].E -= my_model.ETX * PacketSize + my_model.Efs * PacketSize * pow(distance, 2)
-                rec_packets, sent_packets = send_rec(Sensors, my_model, sender, receiver, PacketSize,
-                                                     sent_packets, rec_packets)
+                    else:
+                        Sensors[sender].E -= my_model.ETX * PacketSize + my_model.Efs * PacketSize * pow(distance, 2)
+                        rec_packets, sent_packets = send_rec(Sensors, my_model, sender, receiver, PacketSize,
+                                                             sent_packets, rec_packets)
 
     if packet_type == 'Hello':
         srp += sent_packets

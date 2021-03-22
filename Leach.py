@@ -2,7 +2,7 @@ from src import LEACH
 
 
 def main():
-    myLeach = LEACH.LEACHSimulation(n=200)
+    myLeach = LEACH.LEACHSimulation(n=5)
     myLeach.start()
 
 
