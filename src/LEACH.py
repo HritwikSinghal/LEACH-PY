@@ -430,8 +430,6 @@ class LEACHSimulation:
 
             for receiver in self.list_CH:
                 sender = find_sender.start(self.Sensors, receiver)
-                if len(sender) == 0:
-                    continue
 
                 # todo: test
                 print("sender: ", sender)
