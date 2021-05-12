@@ -26,7 +26,8 @@ def start(sensors: list[Sensor], my_model: Model, sender, sender_rr):
         distance[i] = sqrt(
             pow(sensor.xd - sensors[sender].xd, 2) + pow(sensor.yd - sensors[sender].yd, 2)
         )
-        # node should be in RR and it should be not DEAD
+        
+        # node should be in RR
         if distance[i] <= sender_rr and sender != sensor.id:
             receiver.append(sensor.id)
             # Todo: UNCOMMENT
